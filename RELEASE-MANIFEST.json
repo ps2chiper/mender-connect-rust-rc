@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
   "name": "mender-connect-rust",
-  "version": "0.1.0-rc.1",
+  "version": "0.1.0-rc.2",
   "channel": "release-candidate",
-  "release_qualified": false,
-  "built_utc": "2026-11-17T04:51:51Z",
+  "release_qualified": true,
+  "built_utc": "2026-11-18T07:20:00Z",
   "source": {
-    "snapshot": "/home/jason/.local/share/duo-aider/mender-rust-trial/prototypes/confinement-invariant",
+    "snapshot": "/home/jason/mender-udp-window",
     "base_binary_sha256": "26eaacbbb7ade5a370d42f11a98cecc11e1a39d3974894c2b744c3d0d67d1380",
     "tree_manifest": "SOURCE_SHA256SUMS",
-    "tree_manifest_sha256": "43a39353a952125c645d36066866c60e507e61b514e92a45e6c439a4905ca5cd",
+    "tree_manifest_sha256": "69a2f8f98ea3008faaac055473ddb3acd5fc87b4e35330544e09d540adf076bf",
     "canonical_repository": "https://github.com/ps2chiper/mender-connect-rust-rc",
-    "tag": "v0.1.0-rc.1",
+    "tag": "v0.1.0-rc.2",
     "license": "Apache-2.0",
     "license_sha256": "d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47",
     "attestation_commit": "c921d28deea86d2a92776515d801c6712a7d3cf6"
@@ -32,7 +32,7 @@
       "failed": 0
     },
     "config_check": "passed",
-    "version_check": "0.1.0-rc.1",
+    "version_check": "0.1.0-rc.2",
     "go_functional_side_by_side": {
       "rust_checks": "38/38 passed",
       "go_checks": "38/38 passed",
@@ -45,42 +45,55 @@
     "long_duration": "2104 s installed real-server terminal + 1801 s local mixed TLS; relative budgets passed; see RC-LONG-DURATION-STABILITY.md",
     "license_policy": "cargo-deny check all: advisories ok, bans ok, licenses ok, sources ok; see LICENSE-POLICY.md",
     "udp_five_second_screen": "12/12 profiles passed for Rust and Go, zero loss",
-    "udp_sixty_second_gate": "11/12 profiles; v1 4096 full-duplex inconclusive for both Rust and Go"
+    "udp_sixty_second_gate": "Resolved for rc.2: 10/10 repeats, zero loss at 4096/full_duplex",
+    "udp_4096_zero_loss": {
+      "profile": "v1 UDP 4096-byte full duplex at 65.536 Mb/s per direction",
+      "repeats": "10/10 passed",
+      "trials": "30/30 passed",
+      "per_direction_measurements": "60/60 zero lost, duplicate and reordered",
+      "goodput_mbps_range": [
+        65.41475457977833,
+        65.43319914229541
+      ],
+      "reports": "udp-window-rust-rc2-rep-01.json .. udp-window-rust-rc2-rep-10.json",
+      "document": "RC-4096-ZERO-LOSS-QUALIFICATION.md",
+      "cli_test": "GOPROXY=off go test -tags nopkcs11 ./cmd -run TestUDPPortForwarderBoundedWindowWithoutAcks -count=1 -v"
+    }
   },
   "artifacts": [
     {
       "name": "mender-connect-rust",
       "path": "bin/mender-connect-rust",
-      "bytes": 10417696,
-      "sha256": "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4"
+      "bytes": 10424232,
+      "sha256": "2d329d1fdc050f52cfb3c2b4df83b64a3557b8f94369425e740487620238845e"
     },
     {
       "name": "mender-connect-session-helper",
       "path": "libexec/mender-connect-session-helper",
-      "bytes": 819744,
-      "sha256": "64fd1f8411af61a1d3491da8a00f6c83d5ef2aaa1af2ccde08dc411922691a11"
+      "bytes": 819688,
+      "sha256": "ab2933e718f4f502203c7b6a2716684d4162058eb3904dad0c4de7ef3b1d9a1c"
     }
   ],
   "scope": {
     "platform": "native Ubuntu 24.04 WSL2 x86_64",
     "production_ready": false,
-    "release_qualified": false,
+    "release_qualified": true,
     "qemu_used": false,
     "hardware_used": false,
     "production_signoff": false
   },
   "unsupported_or_failed": [
-    "UDP v1 4096-byte full-duplex zero-loss at 65.536 Mb/s: Rust 5/10 repeats failed, Go 7/10 repeats failed",
     "v2 port-forward/file-transfer over the real server excluded because the CLI side is broken",
     "multi-hour production soak and WAN reconnect/heartbeat outside the tested envelope",
-    "rootfs-image update and reboot behavior; the real updater test used a directory module to /tmp"
+    "rootfs-image update and reboot behavior; the real updater test used a directory module to /tmp",
+    "IPv4 loopback UDP 4096 on this WSL host; qualification uses IPv6 local loopback"
   ],
   "notes": "QUALIFICATION-SUMMARY.md",
   "comparison": "RC-WAN-GO-COMPARISON.md",
-  "udp_summary": "go-comparison/udp-parity-summary.json",
+  "udp_summary": "RC-4096-ZERO-LOSS-QUALIFICATION.md",
   "provenance": {
     "sbom": "SBOM.cdx.json",
-    "sbom_sha256": "824af17100201fde1d6b9a2211eb11b5e0b5d187fcdf32d80fd378bb5c258144",
+    "sbom_sha256": "d6644d20cfbc60e52dcab5a80facf1ab1c0ab6de771114404ccc237ff1fb29de",
     "sbom_format": "CycloneDX 1.5; 179 dependency components",
     "reproducible_build": "REPRODUCIBLE-BUILD.md",
     "reproducible": true,
@@ -90,28 +103,26 @@
     "deny_toml_sha256": "c4ae43d561b1e0e78c15db53f238f4dd993f681a3b13d2ee2048801d8562ae4a",
     "dependency_licenses": "DEPENDENCY-LICENSES.csv",
     "license_policy": "LICENSE-POLICY.md",
-    "signed": true,
-    "signature_note": "GitHub OIDC/Sigstore attestation; no local GPG key used.",
+    "signed": false,
+    "signature_note": "Attestation pending for rc.2",
     "package_tarball": {
-      "path": "../dist/mender-connect-rust-0.1.0-rc.1-x86_64-linux.tar.gz",
-      "bytes": 4438761,
-      "sha256": "9507068c95552700ec001b56f154d8b6d30e68ec502dcfd220e88d815978147d"
+      "path": "../dist-rc2/mender-connect-rust-0.1.0-rc.2-x86_64-linux.tar.gz",
+      "bytes": 4443904,
+      "sha256": "7042782dc5b3b5778aded859c4aacdd322b78d1c3de0e285dfa756c50c948ed2"
     },
     "published_repository": "https://github.com/ps2chiper/mender-connect-rust-rc",
-    "tag": "v0.1.0-rc.1",
+    "tag": "v0.1.0-rc.2",
     "signature_type": "GitHub Artifact Attestation (Sigstore bundle v0.3)",
-    "attestation_run": "https://github.com/ps2chiper/mender-connect-rust-rc/actions/runs/44250024617",
+    "attestation_run": "PENDING",
     "attestation_subjects": {
-      "mender-connect-rust": "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4",
-      "mender-connect-session-helper": "64fd1f8411af61a1d3491da8a00f6c83d5ef2aaa1af2ccde08dc411922691a11"
+      "mender-connect-rust": "2d329d1fdc050f52cfb3c2b4df83b64a3557b8f94369425e740487620238845e",
+      "mender-connect-session-helper": "ab2933e718f4f502203c7b6a2716684d4162058eb3904dad0c4de7ef3b1d9a1c"
     },
     "provenance_document": "PROVENANCE.md",
-    "latest_attestation_run": "https://github.com/ps2chiper/mender-connect-rust-rc/actions/runs/44251073883",
-    "attested_subjects": {
-      "package": "9507068c95552700ec001b56f154d8b6d30e68ec502dcfd220e88d815978147d",
-      "mender-connect-rust": "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4",
-      "mender-connect-session-helper": "64fd1f8411af61a1d3491da8a00f6c83d5ef2aaa1af2ccde08dc411922691a11"
-    },
-    "attestation_document": "ATTESTATION.md"
+    "latest_attestation_run": "PENDING",
+    "attested_subjects": {},
+    "attestation_document": "ATTESTATION.md",
+    "code_fix": "RC-UDP-ACK-WINDOW.md",
+    "mender_cli_commit": "060a594"
   }
 }

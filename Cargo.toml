@@ -1,6 +1,6 @@
 [package]
 name = "mender-connect-rust"
-version = "0.1.0-rc.1"
+version = "0.1.0-rc.2"
 edition = "2024"
 license = "Apache-2.0"
 description = "Experimental Linux-only Rust rewrite of mender-connect"

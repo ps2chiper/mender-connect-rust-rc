@@ -9,20 +9,20 @@ separate authorization described below.
 
 ## Status snapshot
 
-RC `0.1.0-rc.1` binary SHA-256
-`21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4`;
-helper `64fd1f8411af61a1d3491da8a00f6c83d5ef2aaa1af2ccde08dc411922691a11`.
+RC `0.1.0-rc.2` binary SHA-256
+`2d329d1fdc050f52cfb3c2b4df83b64a3557b8f94369425e740487620238845e`;
+helper `ab2933e718f4f502203c7b6a2716684d4162058eb3904dad0c4de7ef3b1d9a1c`.
 The qualified target is native Ubuntu 24.04 WSL2 x86-64 only; QEMU and physical
-hardware are excluded. This is a release candidate, **not** production signoff.
+hardware are excluded. This is a release-qualified candidate for that target,
+**not** production signoff.
 
-Closed qualification: installed service/system-bus/boot; live PortForward,
-MenderClient and real updater; real-server WAN/TLS v1 envelope; 35-minute
-installed real-server and 30-minute local mixed stability soaks; permanent
-Apache-2.0 license and supply-chain policy.
-
-Open: UDP 4096-byte full-duplex zero-loss qualification at 65.536 Mb/s.
-`release_qualified` remains `false`. See `QUALIFICATION-SUMMARY.md` for the
-authoritative status and evidence index.
+All seven qualification blockers are closed: installed service/system-bus/boot;
+live PortForward, MenderClient and real updater; real-server WAN/TLS v1
+envelope; 35-minute installed real-server and 30-minute local mixed stability
+soaks; Apache-2.0 license/supply-chain policy; release provenance/attestation;
+and UDP 4096-byte full-duplex zero-loss (10/10 repeats, 30/30 trials, zero
+lost/duplicate/reordered packets). See `QUALIFICATION-SUMMARY.md` and
+`RC-4096-ZERO-LOSS-QUALIFICATION.md`.
 
 ## Build and verify
 

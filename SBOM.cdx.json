@@ -4,7 +4,7 @@
   "serialNumber": "urn:uuid:de5c07a0-48f1-4b0c-9034-6d72d5da6bbc",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-11-18T06:03:30.854061+00:00",
+    "timestamp": "2026-11-18T07:20:00+00:00",
     "tools": {
       "components": [
         {
@@ -16,9 +16,9 @@
     },
     "component": {
       "type": "application",
-      "bom-ref": "pkg:cargo/mender-connect-rust@0.1.0-rc.1",
+      "bom-ref": "pkg:cargo/mender-connect-rust@0.1.0-rc.2",
       "name": "mender-connect-rust",
-      "version": "0.1.0-rc.1",
+      "version": "0.1.0-rc.2",
       "licenses": [
         {
           "license": {

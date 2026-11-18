@@ -9,69 +9,20 @@ separate authorization described below.
 
 ## Status snapshot
 
-Production signoff is still pending. The latest native release binary has
-SHA-256
-`1b352bc4e0402208e56605438b2cdd2f95f59af3fd3b78a004c1edd2d9d7dae8`.
-For this build, strict all-target Clippy passed, the full all-target Rust suite
-passed (175 library tests plus all integration suites) in the established
-private loopback namespace, and the release build passed. The current-hash mender-cli reports are `reports/mender-rust-mender-cli-x64/candidate-cli-x64-20261114192707.json` (32 checks, Limits enabled) and
-`reports/mender-rust-mender-cli-x64/cli-feature-x64-20261115012329.json` (30 bounded feature checks, Limits disabled). The terminal soak is
-`reports/mender-rust-signoff/terminal-soak-x64-20261114.json`; dependency review is
-`reports/mender-rust-signoff/dependency-review-x64-20261114.json`. Current-hash fmt, strict Clippy, 639 tests and release-build results are recorded in
-`reports/mender-rust-signoff/candidate-checks-20261114/result.json` and
-`reports/mender-rust-signoff/current-evidence-index.json`.
+RC `0.1.0-rc.2` binary SHA-256
+`2d329d1fdc050f52cfb3c2b4df83b64a3557b8f94369425e740487620238845e`;
+helper `ab2933e718f4f502203c7b6a2716684d4162058eb3904dad0c4de7ef3b1d9a1c`.
+The qualified target is native Ubuntu 24.04 WSL2 x86-64 only; QEMU and physical
+hardware are excluded. This is a release-qualified candidate for that target,
+**not** production signoff.
 
-Dependency checks: cargo-audit v0.23.0 scanned 180 lockfile dependencies and
-reported no advisories. cargo-deny v0.20.2 passed advisories, bans, licenses and
-sources for `x86_64-unknown-linux-gnu` using a temporary explicit allowlist of
-the permissive license IDs present in the Linux graph. The default cargo-deny
-run failed because this project has no license policy config and defaults to
-rejecting every license; that is not a dependency license failure. Warnings for duplicate versions of several transitive crates remain a follow-up.
-
-The exact hash also passed a 30-minute isolated native x64 terminal soak with
-121 commands, 29 heartbeat round-trips, 37 control-ping round-trips, verified
-resize, guest isolation and cleanup, and unchanged hash-pinned assets. Peak
-usage was 14 file descriptors, 4 threads and 7936 KiB RSS. QEMU was not used.
-The terminal soak covers local terminal/control behavior only, not the live server or
-installed service.
-
-The exact hash also passed a 30-minute native x64 local TLS mixed soak with
-`Limits.Enabled`: 10,800 v1/v2 forward connections; 3,600 zero-length UDP
-datagrams; 4,320 uploads and downloads each; byte-exact v1/v2 transfers and
-TCP/UDP echo; and cleanup on 1,800 mixed closes. Peak resources were 21 FDs,
-13 threads and 10,752 KiB RSS. The harness enforced relative FD/RSS growth and
-an absolute 32-thread ceiling; relative thread growth was observation-only. Its
-report is `reports/mender-rust-signoff/mixed-soak-x64-20261114.json`.
-Both soaks use local peers only and do not qualify live-server or installed
-service behavior. The historical baseline-plus-four thread test remains failed
-at 13 versus a 12-thread threshold; this current soak does not reclassify it.
-
-A hash-pinned mender-cli run against the disposable Mender device passed 32
-checks in 78.071 seconds including 65.045 seconds actual idle, with Limits
-enabled and native x64; QEMU was not used. It covered terminal prompt, command,
-resize and continuity; bounded downloads; nonempty and empty uploads with round
-trips; empty overwrite; missing-file error; heartbeat; guest isolation and
-cleanup; no staging leftovers; and a negative upload to a unique guest-private
-`/tmp` path outside `Chroot=/work`, with the fixed
-`the peer path is not beneath the trusted root` rejection and the target
-confirmed absent. Port forwarding, Mender commands and updates were explicitly disabled in this
-run. Deterministic command tests now also cover a completed-prior plus invalid-new
-request, and polling bounds use a 5-second OUTER timeout.
-
-A separate 30-check live feature run passed in 9.54 seconds on the same hash. It
-verified TCP and UDP mender-cli echoes and 202 responses for send-inventory and
-check-update, with both commands delivered to a harmless guest stub. Limits
-were disabled and no real updater ran. A separate 17-check transient systemd
-run verified candidate start, manual restart, Restart=on-failure, stop, and
-private-session-bus Auth calls. It did not install the unit or test the real
-system bus, installed paths, boot, or shutdown. Reports:
-reports/mender-rust-mender-cli-x64/cli-feature-x64-20261115012329.json and
-reports/mender-rust-signoff/systemd-transient-qualification-20261114-final2.json.
-
-The terminal soak is local-only and does not qualify real-server stability,
-installed-service behavior or production boot. Earlier UDP throughput benchmarks apply to superseded binaries and do not
-characterize the current hash.
-A passing benchmark execution alone is not a loss-free or production claim.
+All seven qualification blockers are closed: installed service/system-bus/boot;
+live PortForward, MenderClient and real updater; real-server WAN/TLS v1
+envelope; 35-minute installed real-server and 30-minute local mixed stability
+soaks; Apache-2.0 license/supply-chain policy; release provenance/attestation;
+and UDP 4096-byte full-duplex zero-loss (10/10 repeats, 30/30 trials, zero
+lost/duplicate/reordered packets). See `QUALIFICATION-SUMMARY.md` and
+`RC-4096-ZERO-LOSS-QUALIFICATION.md`.
 
 ## Build and verify
 
@@ -158,31 +109,21 @@ not receive extra file descriptors.
 
 ## Qualification boundaries
 
-Native Ubuntu 24.04 WSL2 x86-64 only. QEMU and hardware targets are excluded and
-no blanket hardware or production claim is made. The prepared packaging under
-`support/` and `examples/` is **not** deployment or boot qualification: nothing
-is installed, enabled or started, and any such step requires separate
-authorization after package, path and configuration checks.
+Native Ubuntu 24.04 WSL2 x86-64 only. QEMU and physical hardware are excluded.
+The installed-service evidence is a test installation using test device
+credentials and a test-deployment D-Bus policy; production credentials, package
+policy and rootfs update/reboot behavior remain external.
 
 ## Remaining qualification
 
-Production signoff is pending. For the exact hash
-`1b352bc4e0402208e56605438b2cdd2f95f59af3fd3b78a004c1edd2d9d7dae8`, the
-remaining qualification includes:
+- UDP 4096-byte full-duplex zero-loss at 65.536 Mb/s: both Rust and Go fail
+  repeated zero-loss runs; no zero-loss claim is made. See
+  `RC-4096-CHARACTERIZATION.md` and the UDP evidence.
+- v2 port-forward/file-transfer over the real server is excluded because the
+  CLI side is broken.
+- Multi-hour production soak and WAN reconnect/heartbeat are outside the tested
+  envelope.
+- The real updater test used a directory module to `/tmp`, not a rootfs image.
 
-- longer-duration stability with the installed service and real server; both
-  current-hash 30-minute soaks use local peers only;
-- resolve or formally accept the historical thread-growth test failure (13
-  threads versus the 12-thread baseline-plus-four threshold); the current mixed
-  soak observes relative thread growth and enforces only an absolute ceiling of
-  32;
-- installed-service, system-D-Bus and production-boot behavior;
-- duplicate-version follow-up for several transitive crates and legal approval
-  of a permanent license policy (the temporary allowlist is not a policy
-  signoff);
-- broader real-server protocol coverage and real updater execution; the bounded
-  live feature run above used a harmless command stub with Limits disabled.
-
-Physical hardware and QEMU remain outside the current scope. The native x64 WSL2
-scope and the trusted-root/mount and same-UID confinement assumptions above
-still apply.
+Physical hardware and QEMU remain outside scope. The trusted-root/mount and
+same-UID confinement assumptions above still apply.
