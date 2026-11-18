@@ -20,30 +20,30 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release
-          gh release download v0.1.0-rc.1 \
+          gh release download v0.1.0-rc.2 \
             --repo "${{ github.repository }}" \
-            --pattern 'mender-connect-rust-0.1.0-rc.1-x86_64-linux.tar.gz' \
+            --pattern 'mender-connect-rust-0.1.0-rc.2-x86_64-linux.tar.gz' \
             --pattern 'SHA256SUMS' \
             --dir release
           cd release
           sha256sum -c SHA256SUMS
-          tar -xzf mender-connect-rust-0.1.0-rc.1-x86_64-linux.tar.gz
-          cd mender-connect-rust-0.1.0-rc.1
+          tar -xzf mender-connect-rust-0.1.0-rc.2-x86_64-linux.tar.gz
+          cd mender-connect-rust-0.1.0-rc.2
           sha256sum -c SHA256SUMS
 
       - name: Attest released package and binaries
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
-            release/mender-connect-rust-0.1.0-rc.1-x86_64-linux.tar.gz
-            release/mender-connect-rust-0.1.0-rc.1/bin/mender-connect-rust
-            release/mender-connect-rust-0.1.0-rc.1/libexec/mender-connect-session-helper
+            release/mender-connect-rust-0.1.0-rc.2-x86_64-linux.tar.gz
+            release/mender-connect-rust-0.1.0-rc.2/bin/mender-connect-rust
+            release/mender-connect-rust-0.1.0-rc.2/libexec/mender-connect-session-helper
 
       - name: Upload attested release binaries
         uses: actions/upload-artifact@v4
         with:
-          name: mender-connect-rust-0.1.0-rc.1-release-attested
+          name: mender-connect-rust-0.1.0-rc.2-release-attested
           if-no-files-found: error
           path: |
-            release/mender-connect-rust-0.1.0-rc.1/bin/mender-connect-rust
-            release/mender-connect-rust-0.1.0-rc.1/libexec/mender-connect-session-helper
+            release/mender-connect-rust-0.1.0-rc.2/bin/mender-connect-rust
+            release/mender-connect-rust-0.1.0-rc.2/libexec/mender-connect-session-helper
