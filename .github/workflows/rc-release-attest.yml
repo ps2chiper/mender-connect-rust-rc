@@ -31,10 +31,11 @@ jobs:
           cd mender-connect-rust-0.1.0-rc.1
           sha256sum -c SHA256SUMS
 
-      - name: Attest released binary hashes
+      - name: Attest released package and binaries
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
+            release/mender-connect-rust-0.1.0-rc.1-x86_64-linux.tar.gz
             release/mender-connect-rust-0.1.0-rc.1/bin/mender-connect-rust
             release/mender-connect-rust-0.1.0-rc.1/libexec/mender-connect-session-helper
 
