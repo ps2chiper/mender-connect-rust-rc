@@ -105,6 +105,13 @@
       "mender-connect-rust": "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4",
       "mender-connect-session-helper": "64fd1f8411af61a1d3491da8a00f6c83d5ef2aaa1af2ccde08dc411922691a11"
     },
-    "provenance_document": "PROVENANCE.md"
+    "provenance_document": "PROVENANCE.md",
+    "latest_attestation_run": "https://github.com/ps2chiper/mender-connect-rust-rc/actions/runs/44250860646",
+    "attested_subjects": {
+      "package": "810053c19c470cfac827f4d506229ab43fae76f376e6c28e22ff5ed81b5816cb",
+      "mender-connect-rust": "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4",
+      "mender-connect-session-helper": "64fd1f8411af61a1d3491da8a00f6c83d5ef2aaa1af2ccde08dc411922691a11"
+    },
+    "attestation_document": "ATTESTATION.md"
   }
 }
