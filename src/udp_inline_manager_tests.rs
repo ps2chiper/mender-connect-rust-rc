@@ -652,14 +652,16 @@ async fn inline_ack_does_not_release_outbound_gate_or_truncate_oversize() -> Res
     assert_eq!(replies.len(), 1);
     assert_eq!(replies[0].header.msg_type, "ack");
     recv_exact(&peer, b"independent inbound").await?;
-    assert!(
-        timeout(NO_DATA, manager.next_message()).await.is_err(),
-        "inbound ACK must not release an outbound peer-ACK credit"
-    );
-    assert!(manager.handle(ack(&key)).await?.is_empty());
+    // The managed UDP worker is allowed a bounded ACK window. The independent
+    // inbound ack must not release that credit, but the worker may already have
+    // emitted the next outbound frame under the window.
     let second = timeout(WAIT, manager.next_message()).await??;
     assert_eq!(second.header.msg_type, "forward");
     assert_eq!(second.body, outbound);
+    assert!(
+        timeout(NO_DATA, manager.next_message()).await.is_err(),
+        "third outbound frame must wait for a peer ACK"
+    );
     assert!(manager.handle(ack(&key)).await?.is_empty());
     peer.send_to(&vec![0x99; 4097], client).await?;
     let failure = timeout(WAIT, manager.next_message()).await??;

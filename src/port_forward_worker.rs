@@ -33,6 +33,11 @@ const MAX_HOST_LEN: usize = 253;
 const MAX_READ: usize = 4096;
 const MAX_READ_BUFFER: usize = 4097;
 const MAX_WRITE: usize = 4096;
+/// Maximum number of v1 UDP outbound frames that may await a peer ack.
+/// The upstream v1 protocol uses one credit per frame; allowing a bounded
+/// window keeps the UDP receive path ahead of the socket buffer instead of
+/// serializing every datagram on a full WebSocket round-trip.
+const ACK_WINDOW: usize = 32;
 
 /// Driver command for the worker.
 #[derive(Debug)]
@@ -423,14 +428,21 @@ async fn work(
     let requires_ack = matches!(key.proto(), ProtoType::PORT_FORWARD);
     let is_tcp = matches!(network, Network::Tcp);
     let is_managed = matches!(socket, Socket::ManagedUdp(..));
+    // Only managed v1 UDP gets the wider window. TCP and the legacy/unmanaged
+    // paths retain the original one-credit behavior.
+    let ack_window = if is_managed && matches!(network, Network::Udp) {
+        ACK_WINDOW
+    } else {
+        1
+    };
     let shared = match &socket {
         Socket::ManagedUdp(_, shared) => Some(shared.clone()),
         _ => None,
     };
-    // A pending ack means we emitted outbound socket data as "forward" and are
-    // waiting for the peer to acknowledge it. While set, socket reads are
-    // disabled, but inbound writes still work.
-    let mut pending_ack = false;
+    // Number of outbound "forward" frames emitted by this worker that the
+    // peer has not acknowledged yet. Socket reads are disabled only when the
+    // bounded window is full; inbound writes still work while acks drain.
+    let mut in_flight = 0usize;
     let mut buffer = [0u8; MAX_READ_BUFFER];
     let mut deadline = Instant::now() + INACTIVITY_TIMEOUT;
 
@@ -473,7 +485,12 @@ async fn work(
                 }
                 return Exit::Stop;
             }
-            input = next_input(commands, &mut socket, &mut buffer[..], !pending_ack) => input,
+            input = next_input(
+                commands,
+                &mut socket,
+                &mut buffer[..],
+                !requires_ack || in_flight < ack_window,
+            ) => input,
         };
 
         match input {
@@ -498,7 +515,7 @@ async fn work(
                     };
                 }
                 // Idempotent: spurious acks never create extra credits.
-                pending_ack = false;
+                in_flight = in_flight.saturating_sub(1);
             }
             Input::Command(Some(Command::Forward(data))) => {
                 if data.len() > MAX_WRITE {
@@ -530,7 +547,7 @@ async fn work(
                 deadline = Instant::now() + INACTIVITY_TIMEOUT;
                 if requires_ack {
                     // Acknowledge the received forward direction. This must not
-                    // touch `pending_ack`, which tracks outbound data awaiting a
+                    // touch `in_flight`, which tracks outbound data awaiting a
                     // peer ack; outbound reading therefore keeps flowing.
                     let ack = key.message("ack", Vec::new());
                     if send_message(events, key, generation, ack).await.is_err() {
@@ -572,9 +589,9 @@ async fn work(
                     return Exit::Quiet;
                 }
                 if requires_ack {
-                    // Only now that outbound data was emitted do we gate reads
-                    // until the peer acknowledges it.
-                    pending_ack = true;
+                    // Only now that outbound data was emitted do we consume one
+                    // credit. Reads continue until the bounded window is full.
+                    in_flight = in_flight.saturating_add(1);
                 }
             }
         }
