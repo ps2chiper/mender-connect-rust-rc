@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "name": "mender-connect-rust",
+  "version": "0.1.0-rc.1",
+  "channel": "release-candidate",
+  "release_qualified": false,
+  "built_utc": "2026-11-17T04:51:51Z",
+  "source": {
+    "snapshot": "/home/jason/.local/share/duo-aider/mender-rust-trial/prototypes/confinement-invariant",
+    "base_binary_sha256": "26eaacbbb7ade5a370d42f11a98cecc11e1a39d3974894c2b744c3d0d67d1380",
+    "tree_manifest": "SOURCE_SHA256SUMS",
+    "tree_manifest_sha256": "43a39353a952125c645d36066866c60e507e61b514e92a45e6c439a4905ca5cd",
+    "canonical_repository": "https://github.com/ps2chiper/mender-connect-rust-rc",
+    "tag": "v0.1.0-rc.1",
+    "license": "Apache-2.0",
+    "license_sha256": "d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47"
+  },
+  "toolchain": {
+    "rustc": "1.99.1 (58cf8f9c3 2026-10-13)",
+    "cargo": "1.99.1 (5f94df478 2026-08-27)",
+    "target": "x86_64-unknown-linux-gnu",
+    "build_command": "cargo build --release --locked --bins"
+  },
+  "verification": {
+    "fmt": "passed",
+    "clippy_strict": "passed",
+    "tests": {
+      "command": "dbus-run-session -- cargo test --all-targets --locked",
+      "suites": 56,
+      "passed": 644,
+      "failed": 0
+    },
+    "config_check": "passed",
+    "version_check": "0.1.0-rc.1",
+    "go_functional_side_by_side": {
+      "rust_checks": "38/38 passed",
+      "go_checks": "38/38 passed",
+      "asserted_check_maps_identical": true
+    },
+    "installed_service": "RC-INSTALLED-SERVICE-QUALIFICATION.md",
+    "live_feature_matrix": "32/32 checks (limits disabled); 31/31 (limits enabled); see RC-LIVE-FEATURE-MATRIX.md",
+    "real_updater": "real Mender 3.4 artifact install triggered by RC check-update; deployment success; see RC-REAL-UPDATE-QUALIFICATION.md",
+    "wan_matrix": "32/32 functional v1 WAN/TLS; Go comparison confirms shared TCP/UDP limits; see RC-WAN-TLS-MATRIX.md and RC-WAN-GO-COMPARISON.md",
+    "long_duration": "2104 s installed real-server terminal + 1801 s local mixed TLS; relative budgets passed; see RC-LONG-DURATION-STABILITY.md",
+    "license_policy": "cargo-deny check all: advisories ok, bans ok, licenses ok, sources ok; see LICENSE-POLICY.md",
+    "udp_five_second_screen": "12/12 profiles passed for Rust and Go, zero loss",
+    "udp_sixty_second_gate": "11/12 profiles; v1 4096 full-duplex inconclusive for both Rust and Go"
+  },
+  "artifacts": [
+    {
+      "name": "mender-connect-rust",
+      "path": "bin/mender-connect-rust",
+      "bytes": 10417696,
+      "sha256": "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4"
+    },
+    {
+      "name": "mender-connect-session-helper",
+      "path": "libexec/mender-connect-session-helper",
+      "bytes": 819744,
+      "sha256": "64fd1f8411af61a1d3491da8a00f6c83d5ef2aaa1af2ccde08dc411922691a11"
+    }
+  ],
+  "scope": {
+    "platform": "native Ubuntu 24.04 WSL2 x86_64",
+    "production_ready": false,
+    "release_qualified": false,
+    "qemu_used": false,
+    "hardware_used": false,
+    "production_signoff": false
+  },
+  "unsupported_or_failed": [
+    "UDP v1 4096-byte full-duplex zero-loss at 65.536 Mb/s: Rust 5/10 repeats failed, Go 7/10 repeats failed",
+    "v2 port-forward/file-transfer over the real server excluded because the CLI side is broken",
+    "multi-hour production soak and WAN reconnect/heartbeat outside the tested envelope",
+    "rootfs-image update and reboot behavior; the real updater test used a directory module to /tmp"
+  ],
+  "notes": "QUALIFICATION-SUMMARY.md",
+  "comparison": "RC-WAN-GO-COMPARISON.md",
+  "udp_summary": "go-comparison/udp-parity-summary.json",
+  "provenance": {
+    "sbom": "SBOM.cdx.json",
+    "sbom_sha256": "824af17100201fde1d6b9a2211eb11b5e0b5d187fcdf32d80fd378bb5c258144",
+    "sbom_format": "CycloneDX 1.5; 179 dependency components",
+    "reproducible_build": "REPRODUCIBLE-BUILD.md",
+    "reproducible": true,
+    "reproducible_same_path": true,
+    "reproducible_different_path": true,
+    "deny_toml": "deny.toml",
+    "deny_toml_sha256": "c4ae43d561b1e0e78c15db53f238f4dd993f681a3b13d2ee2048801d8562ae4a",
+    "dependency_licenses": "DEPENDENCY-LICENSES.csv",
+    "license_policy": "LICENSE-POLICY.md",
+    "signed": false,
+    "signature_note": "No local trusted signing key; GitHub release/tag provenance pending attestation or owner key.",
+    "package_tarball": {
+      "path": "../dist/mender-connect-rust-0.1.0-rc.1-x86_64-linux.tar.gz",
+      "bytes": 4439037,
+      "sha256": "d8532716ed21f396d93425316c8a3ce4064f790f3d69876f7d4589e6fef7f92c"
+    },
+    "published_repository": "https://github.com/ps2chiper/mender-connect-rust-rc",
+    "tag": "v0.1.0-rc.1"
+  }
+}

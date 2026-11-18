@@ -1,0 +1,223 @@
+{
+  "started": 1794891884.0135336,
+  "seconds": 5,
+  "trials": 3,
+  "runs": [
+    {
+      "version": "1",
+      "case": "1400/to_device",
+      "rate": 33.6,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v1-1400-to_device.json",
+      "exit": 0,
+      "elapsed_seconds": 29.94
+    },
+    {
+      "version": "1",
+      "case": "1400/to_device",
+      "rate": 33.6,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v1-1400-to_device.json",
+      "exit": 0,
+      "elapsed_seconds": 19.11
+    },
+    {
+      "version": "1",
+      "case": "1400/from_device",
+      "rate": 22.4,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v1-1400-from_device.json",
+      "exit": 0,
+      "elapsed_seconds": 29.89
+    },
+    {
+      "version": "1",
+      "case": "1400/from_device",
+      "rate": 22.4,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v1-1400-from_device.json",
+      "exit": 0,
+      "elapsed_seconds": 18.91
+    },
+    {
+      "version": "1",
+      "case": "1400/full_duplex",
+      "rate": 33.6,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v1-1400-full_duplex.json",
+      "exit": 0,
+      "elapsed_seconds": 29.89
+    },
+    {
+      "version": "1",
+      "case": "1400/full_duplex",
+      "rate": 33.6,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v1-1400-full_duplex.json",
+      "exit": 0,
+      "elapsed_seconds": 18.98
+    },
+    {
+      "version": "1",
+      "case": "4096/to_device",
+      "rate": 98.304,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v1-4096-to_device.json",
+      "exit": 0,
+      "elapsed_seconds": 29.89
+    },
+    {
+      "version": "1",
+      "case": "4096/to_device",
+      "rate": 98.304,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v1-4096-to_device.json",
+      "exit": 0,
+      "elapsed_seconds": 18.96
+    },
+    {
+      "version": "1",
+      "case": "4096/from_device",
+      "rate": 32.768,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v1-4096-from_device.json",
+      "exit": 0,
+      "elapsed_seconds": 29.89
+    },
+    {
+      "version": "1",
+      "case": "4096/from_device",
+      "rate": 32.768,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v1-4096-from_device.json",
+      "exit": 0,
+      "elapsed_seconds": 18.91
+    },
+    {
+      "version": "1",
+      "case": "4096/full_duplex",
+      "rate": 65.536,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v1-4096-full_duplex.json",
+      "exit": 0,
+      "elapsed_seconds": 29.89
+    },
+    {
+      "version": "1",
+      "case": "4096/full_duplex",
+      "rate": 65.536,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v1-4096-full_duplex.json",
+      "exit": 0,
+      "elapsed_seconds": 18.91
+    },
+    {
+      "version": "2",
+      "case": "1400/to_device",
+      "rate": 179.2,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v2-1400-to_device.json",
+      "exit": 0,
+      "elapsed_seconds": 29.89
+    },
+    {
+      "version": "2",
+      "case": "1400/to_device",
+      "rate": 179.2,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v2-1400-to_device.json",
+      "exit": 0,
+      "elapsed_seconds": 18.86
+    },
+    {
+      "version": "2",
+      "case": "1400/from_device",
+      "rate": 89.6,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v2-1400-from_device.json",
+      "exit": 0,
+      "elapsed_seconds": 29.84
+    },
+    {
+      "version": "2",
+      "case": "1400/from_device",
+      "rate": 89.6,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v2-1400-from_device.json",
+      "exit": 0,
+      "elapsed_seconds": 18.97
+    },
+    {
+      "version": "2",
+      "case": "1400/full_duplex",
+      "rate": 89.6,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v2-1400-full_duplex.json",
+      "exit": 0,
+      "elapsed_seconds": 29.89
+    },
+    {
+      "version": "2",
+      "case": "1400/full_duplex",
+      "rate": 89.6,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v2-1400-full_duplex.json",
+      "exit": 0,
+      "elapsed_seconds": 18.86
+    },
+    {
+      "version": "2",
+      "case": "4096/to_device",
+      "rate": 262.144,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v2-4096-to_device.json",
+      "exit": 0,
+      "elapsed_seconds": 29.84
+    },
+    {
+      "version": "2",
+      "case": "4096/to_device",
+      "rate": 262.144,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v2-4096-to_device.json",
+      "exit": 0,
+      "elapsed_seconds": 18.91
+    },
+    {
+      "version": "2",
+      "case": "4096/from_device",
+      "rate": 65.536,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v2-4096-from_device.json",
+      "exit": 0,
+      "elapsed_seconds": 29.89
+    },
+    {
+      "version": "2",
+      "case": "4096/from_device",
+      "rate": 65.536,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v2-4096-from_device.json",
+      "exit": 0,
+      "elapsed_seconds": 18.91
+    },
+    {
+      "version": "2",
+      "case": "4096/full_duplex",
+      "rate": 65.536,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v2-4096-full_duplex.json",
+      "exit": 1,
+      "elapsed_seconds": 0.07
+    },
+    {
+      "version": "2",
+      "case": "4096/full_duplex",
+      "rate": 65.536,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v2-4096-full_duplex.json",
+      "exit": 1,
+      "elapsed_seconds": 0.06
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "component": "resource-soak",
+  "scenario": "smoke-wss",
+  "profile": "release",
+  "seconds_requested": 1800,
+  "state": "/home/jason/.local/share/duo-aider/mender-rust-trial/soak-fourhour-current-rc-1800b",
+  "tls": true,
+  "harness_passed": true,
+  "assets": {
+    "frozen-daemon": "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4",
+    "mock-auth": "8e0b857b1bbb693d8f624d561c3cf5aa7e7c55bc7d5e8b7546928d1f709a1709",
+    "peer": "9f29b4134bc40486658e4502e72ac97149997eb306bbc968dc00399b57cc2042"
+  },
+  "daemon_sha256": "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4",
+  "harness_sha256": "8de0f384ea72a09bac5bfe3d79297b99ec0618f2fba49e7634a3fb658ae0f87f",
+  "thresholds": {
+    "warmup_cycles": 20,
+    "quiescent_fd_growth": 8,
+    "absolute_fd": 96,
+    "quiescent_thread_growth": 4,
+    "absolute_threads_minimum": 64,
+    "quiescent_rss_growth_kib": 32768,
+    "absolute_rss_kib": 196608,
+    "quiescent_children": 0,
+    "upload_stages": 0
+  },
+  "private_ca_sha256": "47d62f454f78bb2fd02de8e7f4645bad4b1d04bae17d7b4961d63afb88390e64",
+  "daemon_pid": 21665,
+  "last_checkpoint": {
+    "counts": {
+      "downloads": 4320,
+      "forward_connections": 10800,
+      "mixed_closes": 1800,
+      "stats": 3600,
+      "uploads": 4320,
+      "zero_udp": 3600
+    },
+    "cycle": 1800,
+    "elapsed_seconds": 1800.192915114
+  },
+  "baseline": {
+    "fd": 11,
+    "threads": 19,
+    "rss_kib": 8704
+  },
+  "thread_absolute_ceiling": 64,
+  "peer_result": {
+    "passed": [
+      "same daemon/WebSocket lifetime 1801.0s/1800 cycles",
+      "validated operations map[downloads:4320 forward_connections:10800 mixed_closes:1800 stats:3600 uploads:4320 zero_udp:3600]",
+      "v1/v2 byte-exact atomic file transfer and immediate key reuse",
+      "real TCP/UDP v1/v2 echo including zero datagrams",
+      "mixed close removes staged file/socket/shell and preserves unrelated socket"
+    ]
+  },
+  "tracked_descendant_leftovers": {},
+  "stage_leftovers": [],
+  "elapsed_seconds": 1801.449,
+  "samples": 3588,
+  "quiescent_samples": 1800,
+  "peaks": {
+    "fd": 18,
+    "threads": 20,
+    "rss_kib": 8704
+  },
+  "quiescent_first_last_quarter_means": {
+    "fd": [
+      11,
+      11
+    ],
+    "threads": [
+      18.964,
+      19
+    ],
+    "rss_kib": [
+      8704,
+      8704
+    ]
+  },
+  "frozen_assets_unchanged": true,
+  "harness_unchanged": true
+}

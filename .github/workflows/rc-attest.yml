@@ -1,0 +1,48 @@
+name: RC build provenance
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v0.1.0-rc.1'
+
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+
+jobs:
+  build-and-attest:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install pinned Rust toolchain
+        uses: dtolnay/rust-toolchain@1.99.1
+
+      - name: Build release binaries
+        run: cargo build --release --locked --bins
+
+      - name: Verify frozen binary hashes
+        run: |
+          test "$(sha256sum target/release/mender-connect-rust | cut -d' ' -f1)" = "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4"
+          test "$(sha256sum target/release/mender-connect-session-helper | cut -d' ' -f1)" = "64fd1f8411af61a1d3491da8a00f6c83d5ef2aaa1af2ccde08dc411922691a11"
+
+      - name: Attest release binaries
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            target/release/mender-connect-rust
+            target/release/mender-connect-session-helper
+
+      - name: Upload attested binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: mender-connect-rust-0.1.0-rc.1-attested-x86_64-linux
+          if-no-files-found: error
+          path: |
+            target/release/mender-connect-rust
+            target/release/mender-connect-session-helper
+            SBOM.cdx.json
+            LICENSE

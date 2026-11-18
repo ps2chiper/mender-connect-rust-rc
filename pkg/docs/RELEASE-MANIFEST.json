@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "name": "mender-connect-rust",
+  "version": "0.1.0-rc.1",
+  "channel": "release-candidate",
+  "release_qualified": false,
+  "built_utc": "2026-11-17T04:51:51Z",
+  "source": {
+    "snapshot": "/home/jason/.local/share/duo-aider/mender-rust-trial/prototypes/confinement-invariant",
+    "base_binary_sha256": "26eaacbbb7ade5a370d42f11a98cecc11e1a39d3974894c2b744c3d0d67d1380",
+    "tree_manifest": "SOURCE_SHA256SUMS",
+    "tree_manifest_sha256": "43a39353a952125c645d36066866c60e507e61b514e92a45e6c439a4905ca5cd"
+  },
+  "toolchain": {
+    "rustc": "1.99.1 (58cf8f9c3 2026-10-13)",
+    "cargo": "1.99.1 (5f94df478 2026-08-27)",
+    "target": "x86_64-unknown-linux-gnu",
+    "build_command": "cargo build --release --locked --bins"
+  },
+  "verification": {
+    "fmt": "passed",
+    "clippy_strict": "passed",
+    "tests": {
+      "command": "dbus-run-session -- cargo test --all-targets --locked",
+      "suites": 56,
+      "passed": 644,
+      "failed": 0
+    },
+    "config_check": "passed",
+    "version_check": "0.1.0-rc.1",
+    "go_functional_side_by_side": {
+      "rust_checks": "38/38 passed",
+      "go_checks": "38/38 passed",
+      "asserted_check_maps_identical": true
+    },
+    "udp_five_second_screen": "12/12 profiles passed for Rust and Go, zero loss",
+    "udp_sixty_second_gate": {
+      "rust": "11/12 profiles pass; v1 4096 full-duplex is inconclusive",
+      "failed_profiles": [],
+      "inconclusive_profiles": [
+        "v1 4096/full_duplex at 65.536 Mbps: Rust 5/10 repeats failed (7/30 trials, 2390 lost); Go 7/10 repeats failed (14/30 trials, 2569 lost)"
+      ],
+      "intermittent_profiles": [
+        "v1 1400/full_duplex at 33.6 Mbps: failed 3/3 initially, passed 3/3 on rerun; predecessor failed 2/3"
+      ],
+      "go_fresh_on_failed_profiles": "both v1 full-duplex profiles passed one fresh 3x60 s run; the 4096 clean run was not representative",
+      "predecessor_26eaacbb_isolation": "v1 1400 full failed 2/3; v1 4096 full passed 3/3"
+    }
+  },
+  "artifacts": [
+    {
+      "name": "mender-connect-rust",
+      "path": "bin/mender-connect-rust",
+      "bytes": 10417696,
+      "sha256": "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4"
+    },
+    {
+      "name": "mender-connect-session-helper",
+      "path": "libexec/mender-connect-session-helper",
+      "bytes": 819744,
+      "sha256": "64fd1f8411af61a1d3491da8a00f6c83d5ef2aaa1af2ccde08dc411922691a11"
+    }
+  ],
+  "scope": {
+    "platform": "native Ubuntu 24.04 WSL2 x86_64",
+    "production_ready": false,
+    "release_qualified": false,
+    "qemu_used": false,
+    "hardware_used": false,
+    "production_signoff": false
+  },
+  "unsupported_or_failed": [
+    "UDP v1 4096 full-duplex zero-loss parity at 65.536 Mbps is inconclusive: Rust 5/10 repeats, Go 7/10 repeats; all loss from-device. v1 1400 full-duplex is intermittent and needs more repeats",
+    "installed systemd service, real system D-Bus, production boot and shutdown",
+    "live-server PortForward, MenderClient commands, updates with a real updater",
+    "real-server/WAN protocol matrix, TLS v1/v2 forwarding and file transfer, paced UDP beyond loopback",
+    "longer real-server stability and resource budgets; historical 13-vs-12 thread-growth failure",
+    "permanent dependency-license policy and legal approval",
+    "4096-byte WSL loopback raw-UDP failure and higher-rate v1 loss above approved points",
+    "ACK tail-latency attribution and TCP v2 throughput variability"
+  ],
+  "notes": "RC-NOTES.md",
+  "comparison": "RC-GO-COMPARISON.md",
+  "udp_summary": "go-comparison/udp-parity-summary.json"
+}

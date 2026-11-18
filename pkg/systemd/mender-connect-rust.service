@@ -1,0 +1,50 @@
+# Review-only packaging artifact for the Rust mender-connect port.
+#
+# PREPARED, NOT INSTALLED. This repository does not install, enable, or start
+# this unit. A separate, explicitly authorized deployment step would place it
+# under /etc/systemd/system and act on it after the path and configuration
+# checks described in support/DEPLOYMENT.md.
+#
+# Design notes (reviewable):
+# - Modeled on the upstream mender-connect.service unit and its dependencies.
+# - User/Group=root is a packaging choice for the foreign-UID transition and
+#   the common Auth permissions, not a universal runtime constraint. The daemon
+#   is a D-Bus CLIENT of the existing system Authentication1 service, which does
+#   not itself require root; an unprivileged daemon is possible if the existing
+#   bus policy permits it. The session helper is used only when an already-root
+#   parent drops to a different UID; the same-UID direct path needs no helper.
+#   No privilege is granted here beyond running as root.
+# - Deliberately NO capability grants, NO setuid/setgid, and NO
+#   NoNewPrivileges= / CapabilityBoundingSet= hardening directives: those could
+#   break the target's normal SUID semantics for unrelated tooling and are
+#   outside the scope of this port.
+# - The session helper at /usr/libexec/mender-connect-session-helper must be an
+#   ordinary root-owned regular file (mode 0755), never SUID/SGID, with every
+#   path ancestor root-owned, real (not symlinked) and not group/other writable.
+# - The main binary lives at /usr/bin/mender-connect-rust.
+# - ExecStart uses the existing configuration defaults; the daemon loads the
+#   installed configuration itself.
+# - KillMode=mixed lets the main daemon run its owned-session cleanup on stop,
+#   after which the remaining members of the whole cgroup are killed.
+# - TimeoutStopSec=180 bounds that graceful stop before the full-cgroup kill.
+
+[Unit]
+Description=Mender Connect (Rust port, review-only packaging)
+Documentation=https://docs.mender.io/
+After=network-online.target mender-authd.service mender-client.service
+Wants=network-online.target mender-authd.service mender-client.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/bin/mender-connect-rust daemon
+Restart=on-failure
+RestartSec=5
+KillMode=mixed
+TimeoutStopSec=180
+
+# Present so a separately authorized packaging step can wire the unit into
+# multi-user.target. This file is not enabled by this repository.
+[Install]
+WantedBy=multi-user.target

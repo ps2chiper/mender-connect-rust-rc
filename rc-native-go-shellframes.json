@@ -1,0 +1,44 @@
+{
+  "scope": "functional side-by-side native protocol peer, loopback WS, private session D-Bus",
+  "implementation": "go",
+  "binary": "/home/jason/.local/share/duo-aider/mender-rust-trial/go-original-matched-daemon",
+  "binary_sha256": "364fc12f9e11cb99ed3c9ab51ca8d996299f20176518af17404e9c0f0230c3ce",
+  "peer_source_sha256": "79196976e8f3521de15900f56af824f9b6fac2c75c8cf6e5ce070d8a6ef6070a",
+  "qemu_used": false,
+  "native_arch": "x86_64",
+  "started_utc": "2026-11-18T03:38:48Z",
+  "checks": {
+    "peer_exit_success": false,
+    "peer_reported_ok": false
+  },
+  "errors": [
+    "no daemon connection within budget"
+  ],
+  "passed": false,
+  "peer_exit": 1,
+  "peer_result": {
+    "ok": false,
+    "endpoint_path": "/api/devices/v1/deviceconnect/connect",
+    "native_arch": "",
+    "qemu_used": false,
+    "checks": {},
+    "frame_counts": {},
+    "durations_seconds": {},
+    "sessions": {},
+    "control_version": 0,
+    "control_protocols": null,
+    "shell_trailing_frames": null,
+    "shell_frames": null,
+    "errors": [
+      "no daemon connection within budget"
+    ]
+  },
+  "exit_codes": {
+    "daemon_exit": 0,
+    "auth_exit": -15,
+    "peer_exit_final": 1
+  },
+  "elapsed_seconds": 95.5,
+  "private_state": "/home/jason/.local/share/duo-aider/mender-rust-trial/rc-native-go-20261117223848-724d2f",
+  "run_dir": "/home/jason/.local/share/duo-aider/mender-rust-trial/rc-native-go-20261117223848-724d2f"
+}

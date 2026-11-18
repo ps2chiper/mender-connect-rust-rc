@@ -1,0 +1,1692 @@
+{
+  "generated_utc": "2026-11-17",
+  "five_second_screen": [
+    {
+      "report": "rc-udp-matrix-go-v1-1400-from_device.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "1400/from_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 22.38,
+          "min_goodput_mbps": 22.373,
+          "max_goodput_mbps": 22.387,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-go-v1-1400-full_duplex.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "1400/full_duplex",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 32.707,
+          "min_goodput_mbps": 32.618,
+          "max_goodput_mbps": 32.742,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 33.535,
+          "min_goodput_mbps": 33.532,
+          "max_goodput_mbps": 33.537,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-go-v1-1400-to_device.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "1400/to_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 32.815,
+          "min_goodput_mbps": 32.809,
+          "max_goodput_mbps": 32.852,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-go-v1-4096-from_device.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/from_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 32.761,
+          "min_goodput_mbps": 32.748,
+          "max_goodput_mbps": 32.761,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-go-v1-4096-full_duplex.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.979,
+          "min_goodput_mbps": 64.951,
+          "max_goodput_mbps": 65.123,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.431,
+          "min_goodput_mbps": 65.403,
+          "max_goodput_mbps": 65.431,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-go-v1-4096-to_device.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/to_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 95.418,
+          "min_goodput_mbps": 95.178,
+          "max_goodput_mbps": 95.78,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-go-v2-1400-from_device.json",
+      "implementation": "go",
+      "version": "2",
+      "case": "1400/from_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 89.068,
+          "min_goodput_mbps": 89.019,
+          "max_goodput_mbps": 89.132,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-go-v2-1400-full_duplex.json",
+      "implementation": "go",
+      "version": "2",
+      "case": "1400/full_duplex",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 88.622,
+          "min_goodput_mbps": 88.476,
+          "max_goodput_mbps": 88.743,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 88.551,
+          "min_goodput_mbps": 88.527,
+          "max_goodput_mbps": 88.685,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-go-v2-1400-to_device.json",
+      "implementation": "go",
+      "version": "2",
+      "case": "1400/to_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 178.041,
+          "min_goodput_mbps": 177.869,
+          "max_goodput_mbps": 178.079,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-go-v2-4096-from_device.json",
+      "implementation": "go",
+      "version": "2",
+      "case": "4096/from_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 65.487,
+          "min_goodput_mbps": 65.424,
+          "max_goodput_mbps": 65.49,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-go-v2-4096-full_duplex.json",
+      "implementation": "go",
+      "version": "2",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.429,
+          "min_goodput_mbps": 65.384,
+          "max_goodput_mbps": 65.429,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.404,
+          "min_goodput_mbps": 65.344,
+          "max_goodput_mbps": 65.429,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-go-v2-4096-to_device.json",
+      "implementation": "go",
+      "version": "2",
+      "case": "4096/to_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 261.212,
+          "min_goodput_mbps": 261.079,
+          "max_goodput_mbps": 261.331,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v1-1400-from_device.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "1400/from_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 22.382,
+          "min_goodput_mbps": 22.379,
+          "max_goodput_mbps": 22.384,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v1-1400-full_duplex.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "1400/full_duplex",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 33.073,
+          "min_goodput_mbps": 32.914,
+          "max_goodput_mbps": 33.086,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 33.536,
+          "min_goodput_mbps": 33.53,
+          "max_goodput_mbps": 33.544,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v1-1400-to_device.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "1400/to_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 32.854,
+          "min_goodput_mbps": 32.838,
+          "max_goodput_mbps": 32.857,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v1-4096-from_device.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/from_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 32.754,
+          "min_goodput_mbps": 32.742,
+          "max_goodput_mbps": 32.755,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v1-4096-full_duplex.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.287,
+          "min_goodput_mbps": 65.221,
+          "max_goodput_mbps": 65.3,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.444,
+          "min_goodput_mbps": 65.431,
+          "max_goodput_mbps": 65.451,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v1-4096-to_device.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/to_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 96.002,
+          "min_goodput_mbps": 95.806,
+          "max_goodput_mbps": 96.147,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v2-1400-from_device.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "1400/from_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 89.133,
+          "min_goodput_mbps": 89.088,
+          "max_goodput_mbps": 89.186,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v2-1400-full_duplex.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "1400/full_duplex",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 88.675,
+          "min_goodput_mbps": 88.635,
+          "max_goodput_mbps": 88.697,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 88.672,
+          "min_goodput_mbps": 88.615,
+          "max_goodput_mbps": 88.72,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v2-1400-to_device.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "1400/to_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 177.829,
+          "min_goodput_mbps": 177.717,
+          "max_goodput_mbps": 177.833,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v2-4096-from_device.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "4096/from_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 65.477,
+          "min_goodput_mbps": 65.438,
+          "max_goodput_mbps": 65.49,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v2-4096-full_duplex.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.444,
+          "min_goodput_mbps": 65.429,
+          "max_goodput_mbps": 65.444,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.438,
+          "min_goodput_mbps": 65.425,
+          "max_goodput_mbps": 65.449,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-matrix-rust-v2-4096-to_device.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "4096/to_device",
+      "passed": true,
+      "source_seconds": 5,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 261.134,
+          "min_goodput_mbps": 260.863,
+          "max_goodput_mbps": 261.203,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    }
+  ],
+  "sixty_second_rc_initial": [
+    {
+      "report": "rc-udp-60m-rust-v1-1400-to_device.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "1400/to_device",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 33.333,
+          "min_goodput_mbps": 33.228,
+          "max_goodput_mbps": 33.369,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-60r1-rust-v1-1400-from_device.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "1400/from_device",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 22.377,
+          "min_goodput_mbps": 22.374,
+          "max_goodput_mbps": 22.379,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-60r1-rust-v1-1400-full_duplex.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "1400/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 32.733,
+          "min_goodput_mbps": 32.685,
+          "max_goodput_mbps": 32.831,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 33.369,
+          "min_goodput_mbps": 33.357,
+          "max_goodput_mbps": 33.467,
+          "lost_packets": 1851,
+          "loss_percent_max": 0.4729
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 33.6",
+        "cases[0] confirmation trial indices are missing",
+        "trial 0 is not acceptable",
+        "trial 0 direction 1 lost_packets=275",
+        "trial 0 direction 1 loss_percent=0.15314959095136527",
+        "trial 0 direction 1 tx_packets 179563 != unique_rx_packets 179288",
+        "trial 1 is not acceptable",
+        "trial 1 direction 1 lost_packets=727",
+        "trial 1 direction 1 loss_percent=0.4048718277150638",
+        "trial 1 direction 1 tx_packets 179563 != unique_rx_packets 178836",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=849",
+        "trial 2 direction 1 loss_percent=0.47285932295901884",
+        "trial 2 direction 1 tx_packets 179546 != unique_rx_packets 178697"
+      ]
+    },
+    {
+      "report": "rc-udp-60r1-rust-v1-4096-from_device.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/from_device",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 32.743,
+          "min_goodput_mbps": 32.74,
+          "max_goodput_mbps": 32.743,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-60r1-rust-v1-4096-full_duplex.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.162,
+          "min_goodput_mbps": 65.155,
+          "max_goodput_mbps": 65.185,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.388,
+          "min_goodput_mbps": 65.377,
+          "max_goodput_mbps": 65.408,
+          "lost_packets": 72,
+          "loss_percent_max": 0.0326
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 1 is not acceptable",
+        "trial 1 direction 1 lost_packets=39",
+        "trial 1 direction 1 loss_percent=0.03256866560331365",
+        "trial 1 direction 1 tx_packets 119747 != unique_rx_packets 119708",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=33",
+        "trial 2 direction 1 loss_percent=0.02755465005594429",
+        "trial 2 direction 1 tx_packets 119762 != unique_rx_packets 119729"
+      ]
+    },
+    {
+      "report": "rc-udp-60r1-rust-v1-4096-to_device.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/to_device",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 96.579,
+          "min_goodput_mbps": 95.652,
+          "max_goodput_mbps": 96.705,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-60r2-rust-v2-1400-from_device.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "1400/from_device",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 89.105,
+          "min_goodput_mbps": 89.093,
+          "max_goodput_mbps": 89.131,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-60r2-rust-v2-1400-full_duplex.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "1400/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 89.014,
+          "min_goodput_mbps": 88.968,
+          "max_goodput_mbps": 89.022,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 88.92,
+          "min_goodput_mbps": 88.898,
+          "max_goodput_mbps": 88.953,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-60r2-rust-v2-1400-to_device.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "1400/to_device",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 178.131,
+          "min_goodput_mbps": 178.116,
+          "max_goodput_mbps": 178.197,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-60r2-rust-v2-4096-from_device.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "4096/from_device",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "from_device": {
+          "median_goodput_mbps": 65.474,
+          "min_goodput_mbps": 65.451,
+          "max_goodput_mbps": 65.478,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-60r2-rust-v2-4096-full_duplex.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.437,
+          "min_goodput_mbps": 65.434,
+          "max_goodput_mbps": 65.443,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.444,
+          "min_goodput_mbps": 65.44,
+          "max_goodput_mbps": 65.452,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-60r2-rust-v2-4096-to_device.json",
+      "implementation": "rust",
+      "version": "2",
+      "case": "4096/to_device",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 261.152,
+          "min_goodput_mbps": 261.136,
+          "max_goodput_mbps": 261.169,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    }
+  ],
+  "sixty_second_rc_rerun": [
+    {
+      "report": "rc-udp-now-rust-v1-1400-full_duplex.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "1400/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 32.849,
+          "min_goodput_mbps": 32.831,
+          "max_goodput_mbps": 32.86,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 33.533,
+          "min_goodput_mbps": 33.53,
+          "max_goodput_mbps": 33.534,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-now-rust-v1-4096-full_duplex.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.319,
+          "min_goodput_mbps": 65.282,
+          "max_goodput_mbps": 65.33,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.44,
+          "min_goodput_mbps": 65.422,
+          "max_goodput_mbps": 65.442,
+          "lost_packets": 3,
+          "loss_percent_max": 0.0025
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 0 is not acceptable",
+        "trial 0 direction 1 lost_packets=3",
+        "trial 0 direction 1 loss_percent=0.0025042990466968293",
+        "trial 0 direction 1 tx_packets 119794 != unique_rx_packets 119791"
+      ]
+    }
+  ],
+  "sixty_second_go_fresh": [
+    {
+      "report": "rc-udp-60m-go-v1-1400-to_device.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "1400/to_device",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 32.771,
+          "min_goodput_mbps": 32.717,
+          "max_goodput_mbps": 32.796,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-60go-go-v1-1400-full_duplex.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "1400/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 32.766,
+          "min_goodput_mbps": 32.459,
+          "max_goodput_mbps": 32.807,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 33.494,
+          "min_goodput_mbps": 33.49,
+          "max_goodput_mbps": 33.512,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-60go-go-v1-4096-full_duplex.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.947,
+          "min_goodput_mbps": 64.943,
+          "max_goodput_mbps": 65.003,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.333,
+          "min_goodput_mbps": 65.326,
+          "max_goodput_mbps": 65.393,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    }
+  ],
+  "sixty_second_predecessor_isolation": [
+    {
+      "report": "rc-udp-60orig-rust-v1-1400-full_duplex.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "1400/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 32.863,
+          "min_goodput_mbps": 32.752,
+          "max_goodput_mbps": 32.902,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 33.511,
+          "min_goodput_mbps": 33.492,
+          "max_goodput_mbps": 33.517,
+          "lost_packets": 185,
+          "loss_percent_max": 0.0824
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 33.6",
+        "cases[0] confirmation trial indices are missing",
+        "trial 1 is not acceptable",
+        "trial 1 direction 1 lost_packets=148",
+        "trial 1 direction 1 loss_percent=0.08241865334603025",
+        "trial 1 direction 1 tx_packets 179571 != unique_rx_packets 179423",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=37",
+        "trial 2 direction 1 loss_percent=0.02060615511422493",
+        "trial 2 direction 1 tx_packets 179558 != unique_rx_packets 179521"
+      ]
+    },
+    {
+      "report": "rc-udp-60orig-rust-v1-4096-full_duplex.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.261,
+          "min_goodput_mbps": 65.189,
+          "max_goodput_mbps": 65.289,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.42,
+          "min_goodput_mbps": 65.412,
+          "max_goodput_mbps": 65.428,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    }
+  ],
+  "ten_repeat_4096_rc": [
+    {
+      "report": "rc-udp-4096-rep-01.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.065,
+          "min_goodput_mbps": 65.029,
+          "max_goodput_mbps": 65.078,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.392,
+          "min_goodput_mbps": 65.391,
+          "max_goodput_mbps": 65.403,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-4096-rep-02.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.276,
+          "min_goodput_mbps": 65.155,
+          "max_goodput_mbps": 65.318,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.437,
+          "min_goodput_mbps": 65.398,
+          "max_goodput_mbps": 65.441,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-4096-rep-03.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.119,
+          "min_goodput_mbps": 65.054,
+          "max_goodput_mbps": 65.128,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.405,
+          "min_goodput_mbps": 65.383,
+          "max_goodput_mbps": 65.42,
+          "lost_packets": 3,
+          "loss_percent_max": 0.0025
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 1 is not acceptable",
+        "trial 1 direction 1 lost_packets=3",
+        "trial 1 direction 1 loss_percent=0.0025049263551651583",
+        "trial 1 direction 1 tx_packets 119764 != unique_rx_packets 119761"
+      ]
+    },
+    {
+      "report": "rc-udp-4096-rep-04.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.255,
+          "min_goodput_mbps": 65.232,
+          "max_goodput_mbps": 65.33,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.411,
+          "min_goodput_mbps": 65.41,
+          "max_goodput_mbps": 65.422,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-4096-rep-05.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.198,
+          "min_goodput_mbps": 65.195,
+          "max_goodput_mbps": 65.216,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.397,
+          "min_goodput_mbps": 65.387,
+          "max_goodput_mbps": 65.405,
+          "lost_packets": 12,
+          "loss_percent_max": 0.01
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=12",
+        "trial 2 direction 1 loss_percent=0.01002171371304493",
+        "trial 2 direction 1 tx_packets 119740 != unique_rx_packets 119728"
+      ]
+    },
+    {
+      "report": "rc-udp-4096-rep-06.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.12,
+          "min_goodput_mbps": 65.09,
+          "max_goodput_mbps": 65.16,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.394,
+          "min_goodput_mbps": 65.392,
+          "max_goodput_mbps": 65.403,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-4096-rep-07.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.17,
+          "min_goodput_mbps": 64.413,
+          "max_goodput_mbps": 65.227,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.409,
+          "min_goodput_mbps": 64.154,
+          "max_goodput_mbps": 65.417,
+          "lost_packets": 2217,
+          "loss_percent_max": 1.8523
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=2217",
+        "trial 2 direction 1 loss_percent=1.8523314979905923",
+        "trial 2 direction 1 tx_packets 119687 != unique_rx_packets 117470"
+      ]
+    },
+    {
+      "report": "rc-udp-4096-rep-08.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.125,
+          "min_goodput_mbps": 65.092,
+          "max_goodput_mbps": 65.157,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.412,
+          "min_goodput_mbps": 65.405,
+          "max_goodput_mbps": 65.415,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-4096-rep-09.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.146,
+          "min_goodput_mbps": 65.038,
+          "max_goodput_mbps": 65.208,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.394,
+          "min_goodput_mbps": 65.34,
+          "max_goodput_mbps": 65.409,
+          "lost_packets": 51,
+          "loss_percent_max": 0.0426
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=51",
+        "trial 2 direction 1 loss_percent=0.042609008045583284",
+        "trial 2 direction 1 tx_packets 119693 != unique_rx_packets 119642"
+      ]
+    },
+    {
+      "report": "rc-udp-4096-rep-10.json",
+      "implementation": "rust",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 65.129,
+          "min_goodput_mbps": 65.081,
+          "max_goodput_mbps": 65.145,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.355,
+          "min_goodput_mbps": 65.346,
+          "max_goodput_mbps": 65.392,
+          "lost_packets": 107,
+          "loss_percent_max": 0.0593
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 0 is not acceptable",
+        "trial 0 direction 1 lost_packets=32",
+        "trial 0 direction 1 loss_percent=0.026736850900279902",
+        "trial 0 direction 1 tx_packets 119685 != unique_rx_packets 119653",
+        "trial 1 is not acceptable",
+        "trial 1 direction 1 lost_packets=71",
+        "trial 1 direction 1 loss_percent=0.05929563467207844",
+        "trial 1 direction 1 tx_packets 119739 != unique_rx_packets 119668",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=4",
+        "trial 2 direction 1 loss_percent=0.003340543339374149",
+        "trial 2 direction 1 tx_packets 119741 != unique_rx_packets 119737"
+      ]
+    }
+  ],
+  "ten_repeat_4096_go": [
+    {
+      "report": "rc-udp-4096-go-rep-01.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.518,
+          "min_goodput_mbps": 64.491,
+          "max_goodput_mbps": 64.553,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.244,
+          "min_goodput_mbps": 65.223,
+          "max_goodput_mbps": 65.293,
+          "lost_packets": 195,
+          "loss_percent_max": 0.1021
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 0 is not acceptable",
+        "trial 0 direction 1 lost_packets=122",
+        "trial 0 direction 1 loss_percent=0.10205020535512634",
+        "trial 0 direction 1 tx_packets 119549 != unique_rx_packets 119427",
+        "trial 1 is not acceptable",
+        "trial 1 direction 1 lost_packets=73",
+        "trial 1 direction 1 loss_percent=0.061065892607680916",
+        "trial 1 direction 1 tx_packets 119543 != unique_rx_packets 119470"
+      ]
+    },
+    {
+      "report": "rc-udp-4096-go-rep-02.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.695,
+          "min_goodput_mbps": 64.641,
+          "max_goodput_mbps": 64.744,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.328,
+          "min_goodput_mbps": 65.277,
+          "max_goodput_mbps": 65.34,
+          "lost_packets": 7,
+          "loss_percent_max": 0.0059
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=7",
+        "trial 2 direction 1 loss_percent=0.005856123413617996",
+        "trial 2 direction 1 tx_packets 119533 != unique_rx_packets 119526"
+      ]
+    },
+    {
+      "report": "rc-udp-4096-go-rep-03.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.653,
+          "min_goodput_mbps": 64.417,
+          "max_goodput_mbps": 64.69,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.325,
+          "min_goodput_mbps": 65.283,
+          "max_goodput_mbps": 65.34,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-4096-go-rep-04.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.595,
+          "min_goodput_mbps": 64.568,
+          "max_goodput_mbps": 64.831,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.231,
+          "min_goodput_mbps": 65.224,
+          "max_goodput_mbps": 65.344,
+          "lost_packets": 205,
+          "loss_percent_max": 0.0878
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 0 is not acceptable",
+        "trial 0 direction 1 lost_packets=105",
+        "trial 0 direction 1 loss_percent=0.08782862544018871",
+        "trial 0 direction 1 tx_packets 119551 != unique_rx_packets 119446",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=100",
+        "trial 2 direction 1 loss_percent=0.08366240546148183",
+        "trial 2 direction 1 tx_packets 119528 != unique_rx_packets 119428"
+      ]
+    },
+    {
+      "report": "rc-udp-4096-go-rep-05.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.768,
+          "min_goodput_mbps": 64.745,
+          "max_goodput_mbps": 64.826,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.322,
+          "min_goodput_mbps": 65.283,
+          "max_goodput_mbps": 65.347,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    },
+    {
+      "report": "rc-udp-4096-go-rep-06.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.655,
+          "min_goodput_mbps": 63.568,
+          "max_goodput_mbps": 64.773,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.226,
+          "min_goodput_mbps": 64.542,
+          "max_goodput_mbps": 65.315,
+          "lost_packets": 1503,
+          "loss_percent_max": 1.1964
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 0 is not acceptable",
+        "trial 0 direction 1 lost_packets=1431",
+        "trial 0 direction 1 loss_percent=1.1963782595246255",
+        "trial 0 direction 1 tx_packets 119611 != unique_rx_packets 118180",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=72",
+        "trial 2 direction 1 loss_percent=0.06024902932119427",
+        "trial 2 direction 1 tx_packets 119504 != unique_rx_packets 119432"
+      ]
+    },
+    {
+      "report": "rc-udp-4096-go-rep-07.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.397,
+          "min_goodput_mbps": 64.352,
+          "max_goodput_mbps": 64.428,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.214,
+          "min_goodput_mbps": 65.155,
+          "max_goodput_mbps": 65.252,
+          "lost_packets": 346,
+          "loss_percent_max": 0.1463
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 0 is not acceptable",
+        "trial 0 direction 1 lost_packets=175",
+        "trial 0 direction 1 loss_percent=0.1463382001237603",
+        "trial 0 direction 1 tx_packets 119586 != unique_rx_packets 119411",
+        "trial 1 is not acceptable",
+        "trial 1 direction 1 lost_packets=171",
+        "trial 1 direction 1 loss_percent=0.14312737499372247",
+        "trial 1 direction 1 tx_packets 119474 != unique_rx_packets 119303"
+      ]
+    },
+    {
+      "report": "rc-udp-4096-go-rep-08.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.299,
+          "min_goodput_mbps": 64.236,
+          "max_goodput_mbps": 64.506,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.242,
+          "min_goodput_mbps": 65.239,
+          "max_goodput_mbps": 65.249,
+          "lost_packets": 161,
+          "loss_percent_max": 0.0661
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 0 is not acceptable",
+        "trial 0 direction 1 lost_packets=67",
+        "trial 0 direction 1 loss_percent=0.05605287375554254",
+        "trial 0 direction 1 tx_packets 119530 != unique_rx_packets 119463",
+        "trial 1 is not acceptable",
+        "trial 1 direction 1 lost_packets=15",
+        "trial 1 direction 1 loss_percent=0.012553456803555138",
+        "trial 1 direction 1 tx_packets 119489 != unique_rx_packets 119474",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=79",
+        "trial 2 direction 1 loss_percent=0.06608942987409545",
+        "trial 2 direction 1 tx_packets 119535 != unique_rx_packets 119456"
+      ]
+    },
+    {
+      "report": "rc-udp-4096-go-rep-09.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": false,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.884,
+          "min_goodput_mbps": 64.809,
+          "max_goodput_mbps": 64.895,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.275,
+          "min_goodput_mbps": 65.234,
+          "max_goodput_mbps": 65.362,
+          "lost_packets": 152,
+          "loss_percent_max": 0.0661
+        }
+      },
+      "errors": [
+        "UDP benchmark failed",
+        "peer exit 1",
+        "cases[0] is not confirmed",
+        "cases[0] confirmed target 0.0 != 65.54",
+        "cases[0] confirmation trial indices are missing",
+        "trial 1 is not acceptable",
+        "trial 1 direction 1 lost_packets=73",
+        "trial 1 direction 1 loss_percent=0.06103883073012475",
+        "trial 1 direction 1 tx_packets 119596 != unique_rx_packets 119523",
+        "trial 2 is not acceptable",
+        "trial 2 direction 1 lost_packets=79",
+        "trial 2 direction 1 loss_percent=0.06609385327164573",
+        "trial 2 direction 1 tx_packets 119527 != unique_rx_packets 119448"
+      ]
+    },
+    {
+      "report": "rc-udp-4096-go-rep-10.json",
+      "implementation": "go",
+      "version": "1",
+      "case": "4096/full_duplex",
+      "passed": true,
+      "source_seconds": 60,
+      "trials": 3,
+      "directions": {
+        "to_device": {
+          "median_goodput_mbps": 64.891,
+          "min_goodput_mbps": 64.819,
+          "max_goodput_mbps": 64.93,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        },
+        "from_device": {
+          "median_goodput_mbps": 65.358,
+          "min_goodput_mbps": 65.307,
+          "max_goodput_mbps": 65.359,
+          "lost_packets": 0,
+          "loss_percent_max": 0
+        }
+      },
+      "errors": []
+    }
+  ]
+}

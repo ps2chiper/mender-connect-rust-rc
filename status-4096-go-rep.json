@@ -1,0 +1,66 @@
+{
+  "started": 1794970251.9534338,
+  "repeats": 10,
+  "runs": [
+    {
+      "repeat": 1,
+      "report": "rc-udp-4096-go-rep-01.json",
+      "exit": 1,
+      "elapsed_seconds": 194.89
+    },
+    {
+      "repeat": 2,
+      "report": "rc-udp-4096-go-rep-02.json",
+      "exit": 1,
+      "elapsed_seconds": 194.97
+    },
+    {
+      "repeat": 3,
+      "report": "rc-udp-4096-go-rep-03.json",
+      "exit": 0,
+      "elapsed_seconds": 194.92
+    },
+    {
+      "repeat": 4,
+      "report": "rc-udp-4096-go-rep-04.json",
+      "exit": 1,
+      "elapsed_seconds": 194.96
+    },
+    {
+      "repeat": 5,
+      "report": "rc-udp-4096-go-rep-05.json",
+      "exit": 0,
+      "elapsed_seconds": 193.87
+    },
+    {
+      "repeat": 6,
+      "report": "rc-udp-4096-go-rep-06.json",
+      "exit": 1,
+      "elapsed_seconds": 193.88
+    },
+    {
+      "repeat": 7,
+      "report": "rc-udp-4096-go-rep-07.json",
+      "exit": 1,
+      "elapsed_seconds": 195.03
+    },
+    {
+      "repeat": 8,
+      "report": "rc-udp-4096-go-rep-08.json",
+      "exit": 1,
+      "elapsed_seconds": 194.95
+    },
+    {
+      "repeat": 9,
+      "report": "rc-udp-4096-go-rep-09.json",
+      "exit": 1,
+      "elapsed_seconds": 194.92
+    },
+    {
+      "repeat": 10,
+      "report": "rc-udp-4096-go-rep-10.json",
+      "exit": 0,
+      "elapsed_seconds": 194.88
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+warning[duplicate]: found 2 duplicate entries for crate 'cfg_aliases'
+   ┌─ /home/jason/releases/mender-connect-rust-0.1.0-rc.1/Cargo.lock:13:1
+   │  
+13 │ ╭ cfg_aliases 0.1.1 registry+https://github.com/rust-lang/crates.io-index
+14 │ │ cfg_aliases 0.2.2 registry+https://github.com/rust-lang/crates.io-index
+   │ ╰───────────────────────────────────────────────────────────────────────┘ lock entries
+   │  
+   ├ cfg_aliases v0.1.1
+     └── (build) nix v0.28.0
+         └── portable-pty v0.9.0
+             └── mender-connect-rust v0.1.0-rc.1
+   ├ cfg_aliases v0.2.2
+     ├── (build) nix v0.29.0
+     │   └── mender-connect-rust v0.1.0-rc.1
+     └── (build) nix v0.31.3
+         └── mender-connect-rust v0.1.0-rc.1 (*)
+
+warning[duplicate]: found 2 duplicate entries for crate 'getrandom'
+   ┌─ /home/jason/releases/mender-connect-rust-0.1.0-rc.1/Cargo.lock:40:1
+   │  
+40 │ ╭ getrandom 0.2.17 registry+https://github.com/rust-lang/crates.io-index
+41 │ │ getrandom 0.4.3 registry+https://github.com/rust-lang/crates.io-index
+   │ ╰─────────────────────────────────────────────────────────────────────┘ lock entries
+   │  
+   ├ getrandom v0.2.17
+     └── ring v0.17.14
+         ├── rustls v0.23.46
+         │   ├── mender-connect-rust v0.1.0-rc.1
+         │   ├── tokio-rustls v0.26.6
+         │   │   └── tokio-tungstenite v0.30.0
+         │   │       └── mender-connect-rust v0.1.0-rc.1 (*)
+         │   ├── tokio-tungstenite v0.30.0 (*)
+         │   └── tungstenite v0.30.0
+         │       └── tokio-tungstenite v0.30.0 (*)
+         └── rustls-webpki v0.103.16
+             └── rustls v0.23.46 (*)
+   ├ getrandom v0.4.3
+     ├── rand v0.10.3
+     │   ├── mender-connect-rust v0.1.0-rc.1
+     │   └── tungstenite v0.30.0
+     │       └── tokio-tungstenite v0.30.0
+     │           └── mender-connect-rust v0.1.0-rc.1 (*)
+     └── tempfile v3.27.0
+         └── mender-connect-rust v0.1.0-rc.1 (*)
+
+warning[duplicate]: found 3 duplicate entries for crate 'nix'
+   ┌─ /home/jason/releases/mender-connect-rust-0.1.0-rc.1/Cargo.lock:66:1
+   │  
+66 │ ╭ nix 0.28.0 registry+https://github.com/rust-lang/crates.io-index
+67 │ │ nix 0.29.0 registry+https://github.com/rust-lang/crates.io-index
+68 │ │ nix 0.31.3 registry+https://github.com/rust-lang/crates.io-index
+   │ ╰────────────────────────────────────────────────────────────────┘ lock entries
+   │  
+   ├ nix v0.28.0
+     └── portable-pty v0.9.0
+         └── mender-connect-rust v0.1.0-rc.1
+   ├ nix v0.29.0
+     └── mender-connect-rust v0.1.0-rc.1
+   ├ nix v0.31.3
+     └── mender-connect-rust v0.1.0-rc.1
+
+warning[duplicate]: found 2 duplicate entries for crate 'syn'
+    ┌─ /home/jason/releases/mender-connect-rust-0.1.0-rc.1/Cargo.lock:107:1
+    │  
+107 │ ╭ syn 2.0.119 registry+https://github.com/rust-lang/crates.io-index
+108 │ │ syn 3.0.10 registry+https://github.com/rust-lang/crates.io-index
+    │ ╰────────────────────────────────────────────────────────────────┘ lock entries
+    │  
+    ├ syn v2.0.119
+      └── thiserror-impl v1.0.69
+          └── thiserror v1.0.69
+              └── filedescriptor v0.8.3
+                  └── portable-pty v0.9.0
+                      └── mender-connect-rust v0.1.0-rc.1
+    ├ syn v3.0.10
+      ├── async-trait v0.1.92
+      │   └── zbus v6.2.1
+      │       └── mender-connect-rust v0.1.0-rc.1
+      ├── clap_derive v4.6.7
+      │   └── clap v4.6.7
+      │       └── mender-connect-rust v0.1.0-rc.1 (*)
+      ├── displaydoc v0.2.7
+      │   ├── icu_collections v2.4.0
+      │   │   ├── icu_normalizer v2.4.0
+      │   │   │   └── idna_adapter v1.2.2
+      │   │   │       └── idna v1.1.0
+      │   │   │           └── url v2.5.8
+      │   │   │               └── mender-connect-rust v0.1.0-rc.1 (*)
+      │   │   └── icu_properties v2.4.0
+      │   │       └── idna_adapter v1.2.2 (*)
+      │   ├── icu_locale_core v2.4.0
+      │   │   ├── icu_properties v2.4.0 (*)
+      │   │   └── icu_provider v2.4.0
+      │   │       ├── icu_normalizer v2.4.0 (*)
+      │   │       └── icu_properties v2.4.0 (*)
+      │   ├── icu_properties v2.4.0 (*)
+      │   ├── icu_provider v2.4.0 (*)
+      │   ├── tinystr v0.8.5
+      │   │   └── icu_locale_core v2.4.0 (*)
+      │   └── zerotrie v0.2.5
+      │       ├── icu_properties v2.4.0 (*)
+      │       └── icu_provider v2.4.0 (*)
+      ├── futures-macro v0.3.34
+      │   └── futures-util v0.3.34
+      │       ├── mender-connect-rust v0.1.0-rc.1 (*)
+      │       └── tokio-tungstenite v0.30.0
+      │           └── mender-connect-rust v0.1.0-rc.1 (*)
+      ├── serde_derive v1.0.229
+      │   └── serde v1.0.229
+      │       ├── mender-connect-rust v0.1.0-rc.1 (*)
+      │       ├── rmp-serde v1.3.1
+      │       │   └── mender-connect-rust v0.1.0-rc.1 (*)
+      │       ├── rmpv v1.3.1
+      │       │   └── mender-connect-rust v0.1.0-rc.1 (*)
+      │       ├── zbus v6.2.1 (*)
+      │       ├── zbus_utils v6.1.0
+      │       │   ├── zbus v6.2.1 (*)
+      │       │   └── zbus_macros v6.2.1
+      │       │       └── zbus v6.2.1 (*)
+      │       └── zcheapstr v1.2.0
+      │           └── zbus v6.2.1 (*)
+      ├── serde_repr v0.1.21
+      │   └── zbus v6.2.1 (*)
+      ├── synstructure v0.14.0
+      │   ├── yoke-derive v0.8.4
+      │   │   └── yoke v0.8.4
+      │   │       ├── icu_collections v2.4.0 (*)
+      │   │       ├── icu_provider v2.4.0 (*)
+      │   │       ├── zerotrie v0.2.5 (*)
+      │   │       └── zerovec v0.11.9
+      │   │           ├── icu_collections v2.4.0 (*)
+      │   │           ├── icu_locale_core v2.4.0 (*)
+      │   │           ├── icu_normalizer v2.4.0 (*)
+      │   │           ├── icu_properties v2.4.0 (*)
+      │   │           ├── icu_provider v2.4.0 (*)
+      │   │           ├── potential_utf v0.1.6
+      │   │           │   └── icu_collections v2.4.0 (*)
+      │   │           └── tinystr v0.8.5 (*)
+      │   └── zerofrom-derive v0.1.8
+      │       └── zerofrom v0.1.8
+      │           ├── icu_collections v2.4.0 (*)
+      │           ├── icu_provider v2.4.0 (*)
+      │           ├── yoke v0.8.4 (*)
+      │           ├── zerotrie v0.2.5 (*)
+      │           └── zerovec v0.11.9 (*)
+      ├── thiserror-impl v2.0.21
+      │   └── thiserror v2.0.21
+      │       └── tungstenite v0.30.0
+      │           └── tokio-tungstenite v0.30.0 (*)
+      ├── tokio-macros v2.7.2
+      │   └── tokio v1.54.1
+      │       ├── mender-connect-rust v0.1.0-rc.1 (*)
+      │       ├── tokio-rustls v0.26.6
+      │       │   └── tokio-tungstenite v0.30.0 (*)
+      │       ├── tokio-tungstenite v0.30.0 (*)
+      │       └── zbus v6.2.1 (*)
+      ├── yoke-derive v0.8.4 (*)
+      ├── zbus_macros v6.2.1 (*)
+      ├── zbus_utils v6.1.0 (*)
+      ├── zerofrom-derive v0.1.8 (*)
+      └── zerovec-derive v0.11.7
+          └── zerovec v0.11.9 (*)
+
+warning[duplicate]: found 2 duplicate entries for crate 'thiserror'
+    ┌─ /home/jason/releases/mender-connect-rust-0.1.0-rc.1/Cargo.lock:111:1
+    │  
+111 │ ╭ thiserror 1.0.69 registry+https://github.com/rust-lang/crates.io-index
+112 │ │ thiserror 2.0.21 registry+https://github.com/rust-lang/crates.io-index
+    │ ╰──────────────────────────────────────────────────────────────────────┘ lock entries
+    │  
+    ├ thiserror v1.0.69
+      └── filedescriptor v0.8.3
+          └── portable-pty v0.9.0
+              └── mender-connect-rust v0.1.0-rc.1
+    ├ thiserror v2.0.21
+      └── tungstenite v0.30.0
+          └── tokio-tungstenite v0.30.0
+              └── mender-connect-rust v0.1.0-rc.1
+
+warning[duplicate]: found 2 duplicate entries for crate 'thiserror-impl'
+    ┌─ /home/jason/releases/mender-connect-rust-0.1.0-rc.1/Cargo.lock:113:1
+    │  
+113 │ ╭ thiserror-impl 1.0.69 registry+https://github.com/rust-lang/crates.io-index
+114 │ │ thiserror-impl 2.0.21 registry+https://github.com/rust-lang/crates.io-index
+    │ ╰───────────────────────────────────────────────────────────────────────────┘ lock entries
+    │  
+    ├ thiserror-impl v1.0.69
+      └── thiserror v1.0.69
+          └── filedescriptor v0.8.3
+              └── portable-pty v0.9.0
+                  └── mender-connect-rust v0.1.0-rc.1
+    ├ thiserror-impl v2.0.21
+      └── thiserror v2.0.21
+          └── tungstenite v0.30.0
+              └── tokio-tungstenite v0.30.0
+                  └── mender-connect-rust v0.1.0-rc.1
+
+advisories ok, bans ok, licenses ok, sources ok

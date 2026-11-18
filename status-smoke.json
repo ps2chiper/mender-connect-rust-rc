@@ -1,0 +1,25 @@
+{
+  "started": 1794891817.4303715,
+  "seconds": 5,
+  "trials": 3,
+  "runs": [
+    {
+      "version": "2",
+      "case": "4096/full_duplex",
+      "rate": 65.536,
+      "implementation": "go",
+      "report": "rc-udp-matrix-go-v2-4096-full_duplex.json",
+      "exit": 0,
+      "elapsed_seconds": 29.89
+    },
+    {
+      "version": "2",
+      "case": "4096/full_duplex",
+      "rate": 65.536,
+      "implementation": "rust",
+      "report": "rc-udp-matrix-rust-v2-4096-full_duplex.json",
+      "exit": 0,
+      "elapsed_seconds": 19.31
+    }
+  ]
+}

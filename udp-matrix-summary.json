@@ -1,0 +1,509 @@
+{
+  "five_second": {
+    "v1/1400/from_device": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 22.38,
+            "min_goodput_mbps": 22.373,
+            "max_goodput_mbps": 22.387,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 22.382,
+            "min_goodput_mbps": 22.379,
+            "max_goodput_mbps": 22.384,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    },
+    "v1/1400/full_duplex": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 32.707,
+            "min_goodput_mbps": 32.618,
+            "max_goodput_mbps": 32.742,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          },
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 33.535,
+            "min_goodput_mbps": 33.532,
+            "max_goodput_mbps": 33.537,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 33.073,
+            "min_goodput_mbps": 32.914,
+            "max_goodput_mbps": 33.086,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          },
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 33.536,
+            "min_goodput_mbps": 33.53,
+            "max_goodput_mbps": 33.544,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    },
+    "v1/1400/to_device": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 32.815,
+            "min_goodput_mbps": 32.809,
+            "max_goodput_mbps": 32.852,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 32.854,
+            "min_goodput_mbps": 32.838,
+            "max_goodput_mbps": 32.857,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    },
+    "v1/4096/from_device": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 32.761,
+            "min_goodput_mbps": 32.748,
+            "max_goodput_mbps": 32.761,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 32.754,
+            "min_goodput_mbps": 32.742,
+            "max_goodput_mbps": 32.755,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    },
+    "v1/4096/full_duplex": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 64.979,
+            "min_goodput_mbps": 64.951,
+            "max_goodput_mbps": 65.123,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          },
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 65.431,
+            "min_goodput_mbps": 65.403,
+            "max_goodput_mbps": 65.431,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 65.287,
+            "min_goodput_mbps": 65.221,
+            "max_goodput_mbps": 65.3,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          },
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 65.444,
+            "min_goodput_mbps": 65.431,
+            "max_goodput_mbps": 65.451,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    },
+    "v1/4096/to_device": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 95.418,
+            "min_goodput_mbps": 95.178,
+            "max_goodput_mbps": 95.78,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 96.002,
+            "min_goodput_mbps": 95.806,
+            "max_goodput_mbps": 96.147,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    },
+    "v2/1400/from_device": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 89.068,
+            "min_goodput_mbps": 89.019,
+            "max_goodput_mbps": 89.132,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 89.133,
+            "min_goodput_mbps": 89.088,
+            "max_goodput_mbps": 89.186,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    },
+    "v2/1400/full_duplex": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 88.622,
+            "min_goodput_mbps": 88.476,
+            "max_goodput_mbps": 88.743,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          },
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 88.551,
+            "min_goodput_mbps": 88.527,
+            "max_goodput_mbps": 88.685,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 88.675,
+            "min_goodput_mbps": 88.635,
+            "max_goodput_mbps": 88.697,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          },
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 88.672,
+            "min_goodput_mbps": 88.615,
+            "max_goodput_mbps": 88.72,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    },
+    "v2/1400/to_device": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 178.041,
+            "min_goodput_mbps": 177.869,
+            "max_goodput_mbps": 178.079,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 177.829,
+            "min_goodput_mbps": 177.717,
+            "max_goodput_mbps": 177.833,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    },
+    "v2/4096/from_device": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 65.487,
+            "min_goodput_mbps": 65.424,
+            "max_goodput_mbps": 65.49,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 65.477,
+            "min_goodput_mbps": 65.438,
+            "max_goodput_mbps": 65.49,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    },
+    "v2/4096/full_duplex": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 65.429,
+            "min_goodput_mbps": 65.384,
+            "max_goodput_mbps": 65.429,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          },
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 65.404,
+            "min_goodput_mbps": 65.344,
+            "max_goodput_mbps": 65.429,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 65.444,
+            "min_goodput_mbps": 65.429,
+            "max_goodput_mbps": 65.444,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          },
+          "from_device": {
+            "n": 3,
+            "median_goodput_mbps": 65.438,
+            "min_goodput_mbps": 65.425,
+            "max_goodput_mbps": 65.449,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    },
+    "v2/4096/to_device": {
+      "go": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 261.212,
+            "min_goodput_mbps": 261.079,
+            "max_goodput_mbps": 261.331,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      },
+      "rust": {
+        "passed": true,
+        "expected_seconds": 5,
+        "trials": 3,
+        "errors": [],
+        "directions": {
+          "to_device": {
+            "n": 3,
+            "median_goodput_mbps": 261.134,
+            "min_goodput_mbps": 260.863,
+            "max_goodput_mbps": 261.203,
+            "lost_packets": 0,
+            "duplicate_packets": 0,
+            "reordered_packets": 0
+          }
+        }
+      }
+    }
+  },
+  "sixty_second": {}
+}

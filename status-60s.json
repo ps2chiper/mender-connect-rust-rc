@@ -1,0 +1,115 @@
+{
+  "started": 1794892610.9875367,
+  "seconds": 60,
+  "trials": 3,
+  "runs": [
+    {
+      "version": "1",
+      "case": "1400/to_device",
+      "rate": 33.6,
+      "implementation": "go",
+      "report": "rc-udp-60s-go-v1-1400-to_device.json",
+      "exit": 1,
+      "elapsed_seconds": 29.94
+    },
+    {
+      "version": "1",
+      "case": "1400/to_device",
+      "rate": 33.6,
+      "implementation": "rust",
+      "report": "rc-udp-60s-rust-v1-1400-to_device.json",
+      "exit": 1,
+      "elapsed_seconds": 18.91
+    },
+    {
+      "version": "1",
+      "case": "1400/from_device",
+      "rate": 22.4,
+      "implementation": "go",
+      "report": "rc-udp-60s-go-v1-1400-from_device.json",
+      "exit": 1,
+      "elapsed_seconds": 29.85
+    },
+    {
+      "version": "1",
+      "case": "1400/from_device",
+      "rate": 22.4,
+      "implementation": "rust",
+      "report": "rc-udp-60s-rust-v1-1400-from_device.json",
+      "exit": 1,
+      "elapsed_seconds": 18.91
+    },
+    {
+      "version": "1",
+      "case": "1400/full_duplex",
+      "rate": 33.6,
+      "implementation": "go",
+      "report": "rc-udp-60s-go-v1-1400-full_duplex.json",
+      "exit": 1,
+      "elapsed_seconds": 29.84
+    },
+    {
+      "version": "1",
+      "case": "1400/full_duplex",
+      "rate": 33.6,
+      "implementation": "rust",
+      "report": "rc-udp-60s-rust-v1-1400-full_duplex.json",
+      "exit": 1,
+      "elapsed_seconds": 18.96
+    },
+    {
+      "version": "1",
+      "case": "4096/to_device",
+      "rate": 98.304,
+      "implementation": "go",
+      "report": "rc-udp-60s-go-v1-4096-to_device.json",
+      "exit": 1,
+      "elapsed_seconds": 30.03
+    },
+    {
+      "version": "1",
+      "case": "4096/to_device",
+      "rate": 98.304,
+      "implementation": "rust",
+      "report": "rc-udp-60s-rust-v1-4096-to_device.json",
+      "exit": 1,
+      "elapsed_seconds": 19.06
+    },
+    {
+      "version": "1",
+      "case": "4096/from_device",
+      "rate": 32.768,
+      "implementation": "go",
+      "report": "rc-udp-60s-go-v1-4096-from_device.json",
+      "exit": 1,
+      "elapsed_seconds": 29.94
+    },
+    {
+      "version": "1",
+      "case": "4096/from_device",
+      "rate": 32.768,
+      "implementation": "rust",
+      "report": "rc-udp-60s-rust-v1-4096-from_device.json",
+      "exit": 1,
+      "elapsed_seconds": 18.91
+    },
+    {
+      "version": "1",
+      "case": "4096/full_duplex",
+      "rate": 65.536,
+      "implementation": "go",
+      "report": "rc-udp-60s-go-v1-4096-full_duplex.json",
+      "exit": 1,
+      "elapsed_seconds": 29.89
+    },
+    {
+      "version": "1",
+      "case": "4096/full_duplex",
+      "rate": 65.536,
+      "implementation": "rust",
+      "report": "rc-udp-60s-rust-v1-4096-full_duplex.json",
+      "exit": 1,
+      "elapsed_seconds": 18.96
+    }
+  ]
+}

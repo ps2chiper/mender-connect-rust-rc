@@ -1,0 +1,25 @@
+{
+  "started": 1794895335.8870006,
+  "seconds": 60,
+  "trials": 3,
+  "runs": [
+    {
+      "version": "1",
+      "case": "1400/full_duplex",
+      "rate": 33.6,
+      "implementation": "go",
+      "report": "rc-udp-60go-go-v1-1400-full_duplex.json",
+      "exit": 0,
+      "elapsed_seconds": 194.96
+    },
+    {
+      "version": "1",
+      "case": "4096/full_duplex",
+      "rate": 65.536,
+      "implementation": "go",
+      "report": "rc-udp-60go-go-v1-4096-full_duplex.json",
+      "exit": 0,
+      "elapsed_seconds": 194.91
+    }
+  ]
+}

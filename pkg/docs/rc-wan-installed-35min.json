@@ -1,0 +1,44 @@
+{
+  "label": "installed-wan-35min-20261117",
+  "seconds_requested": 2100,
+  "daemon_pid": 16658,
+  "daemon_sha256": "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4",
+  "server": "https://mender.zapto.org",
+  "device_id": "2bc5c66f-dd78-47ae-9158-24fe92c72fc0",
+  "checks": {
+    "terminal_alive": true,
+    "daemon_alive": true,
+    "thread_growth": true,
+    "fd_growth": true,
+    "rss_growth": true
+  },
+  "passed": true,
+  "baseline": {
+    "threads": 19,
+    "fd": 14,
+    "rss_kib": 7424
+  },
+  "commands": 69,
+  "peaks": {
+    "threads": 19,
+    "fd": 14,
+    "rss_kib": 7424
+  },
+  "terminal_exit_code": 0,
+  "elapsed_seconds": 2104.183,
+  "samples": 2090,
+  "first_last_means": {
+    "threads": [
+      18.345,
+      18.326
+    ],
+    "fd": [
+      14.0,
+      14.0
+    ],
+    "rss_kib": [
+      7424.0,
+      7424.0
+    ]
+  }
+}

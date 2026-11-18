@@ -1,0 +1,52 @@
+{
+  "started": 1794893924.717989,
+  "seconds": 60,
+  "trials": 3,
+  "runs": [
+    {
+      "version": "1",
+      "case": "1400/from_device",
+      "rate": 22.4,
+      "implementation": "rust",
+      "report": "rc-udp-60r1-rust-v1-1400-from_device.json",
+      "exit": 0,
+      "elapsed_seconds": 184.12
+    },
+    {
+      "version": "1",
+      "case": "1400/full_duplex",
+      "rate": 33.6,
+      "implementation": "rust",
+      "report": "rc-udp-60r1-rust-v1-1400-full_duplex.json",
+      "exit": 1,
+      "elapsed_seconds": 183.87
+    },
+    {
+      "version": "1",
+      "case": "4096/to_device",
+      "rate": 98.304,
+      "implementation": "rust",
+      "report": "rc-udp-60r1-rust-v1-4096-to_device.json",
+      "exit": 0,
+      "elapsed_seconds": 183.92
+    },
+    {
+      "version": "1",
+      "case": "4096/from_device",
+      "rate": 32.768,
+      "implementation": "rust",
+      "report": "rc-udp-60r1-rust-v1-4096-from_device.json",
+      "exit": 0,
+      "elapsed_seconds": 183.95
+    },
+    {
+      "version": "1",
+      "case": "4096/full_duplex",
+      "rate": 65.536,
+      "implementation": "rust",
+      "report": "rc-udp-60r1-rust-v1-4096-full_duplex.json",
+      "exit": 1,
+      "elapsed_seconds": 184.04
+    }
+  ]
+}

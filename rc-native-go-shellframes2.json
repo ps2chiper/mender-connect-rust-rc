@@ -1,0 +1,262 @@
+{
+  "scope": "functional side-by-side native protocol peer, loopback WS, private session D-Bus",
+  "implementation": "go",
+  "binary": "/home/jason/.local/share/duo-aider/mender-rust-trial/go-original-matched-daemon",
+  "binary_sha256": "364fc12f9e11cb99ed3c9ab51ca8d996299f20176518af17404e9c0f0230c3ce",
+  "peer_source_sha256": "79196976e8f3521de15900f56af824f9b6fac2c75c8cf6e5ce070d8a6ef6070a",
+  "qemu_used": false,
+  "native_arch": "x86_64",
+  "started_utc": "2026-11-18T03:40:53Z",
+  "checks": {
+    "peer_exit_success": true,
+    "control_file_v1": true,
+    "control_file_v2": true,
+    "control_generic_ping_idle": true,
+    "control_generic_ping_live": true,
+    "control_idle_close_timing": true,
+    "control_idle_session_timeout": true,
+    "control_live_no_late_error": true,
+    "control_live_not_closed": true,
+    "control_live_ping_pong": true,
+    "control_no_generic_ping_legacy": true,
+    "control_no_mender_client": true,
+    "control_open_idle": true,
+    "control_open_live": true,
+    "control_pf_v1": true,
+    "control_pf_v2": true,
+    "control_protocol_set_exact": true,
+    "control_shell_protocol": true,
+    "file_empty_upload_committed": true,
+    "file_fixture_existing": true,
+    "file_stat_existing": true,
+    "file_stat_missing_error": true,
+    "legacy_alive_after_file_transfer": true,
+    "legacy_alive_after_timeout": true,
+    "legacy_b_survives_stop_a": true,
+    "legacy_duplicate_user_rejected": true,
+    "legacy_marker_a": true,
+    "legacy_marker_b": true,
+    "legacy_new_usera": true,
+    "legacy_new_userb": true,
+    "legacy_shell_ping_positive": true,
+    "legacy_shell_pong_positive": true,
+    "legacy_stop_a_acked": true,
+    "legacy_stop_empty_both_error": true,
+    "legacy_stop_empty_sid_userb": true,
+    "legacy_user_c_reuses_slot": true,
+    "reader_joined": true,
+    "peer_reported_ok": true
+  },
+  "errors": [],
+  "passed": true,
+  "peer_exit": 0,
+  "peer_result": {
+    "ok": true,
+    "endpoint_path": "/api/devices/v1/deviceconnect/connect",
+    "native_arch": "",
+    "qemu_used": false,
+    "checks": {
+      "control_file_v1": true,
+      "control_file_v2": true,
+      "control_generic_ping_idle": true,
+      "control_generic_ping_live": true,
+      "control_idle_close_timing": true,
+      "control_idle_session_timeout": true,
+      "control_live_no_late_error": true,
+      "control_live_not_closed": true,
+      "control_live_ping_pong": true,
+      "control_no_generic_ping_legacy": true,
+      "control_no_mender_client": true,
+      "control_open_idle": true,
+      "control_open_live": true,
+      "control_pf_v1": true,
+      "control_pf_v2": true,
+      "control_protocol_set_exact": true,
+      "control_shell_protocol": true,
+      "file_empty_upload_committed": true,
+      "file_fixture_existing": true,
+      "file_stat_existing": true,
+      "file_stat_missing_error": true,
+      "legacy_alive_after_file_transfer": true,
+      "legacy_alive_after_timeout": true,
+      "legacy_b_survives_stop_a": true,
+      "legacy_duplicate_user_rejected": true,
+      "legacy_marker_a": true,
+      "legacy_marker_b": true,
+      "legacy_new_usera": true,
+      "legacy_new_userb": true,
+      "legacy_shell_ping_positive": true,
+      "legacy_shell_pong_positive": true,
+      "legacy_stop_a_acked": true,
+      "legacy_stop_empty_both_error": true,
+      "legacy_stop_empty_sid_userb": true,
+      "legacy_user_c_reuses_slot": true,
+      "reader_joined": true
+    },
+    "frame_counts": {
+      "control_ping_received": 3,
+      "control_ping_unanswered": 1,
+      "control_pong_sent": 2,
+      "shell_ping_received": 1,
+      "shell_pong_sent": 1,
+      "shell_trailing_output": 1
+    },
+    "durations_seconds": {
+      "control_generic_ping_idle": 48.000965996,
+      "control_generic_ping_live": 48.001830346,
+      "control_idle_close": 60.00150557
+    },
+    "sessions": {
+      "sid-a": "usera",
+      "sid-b": "userb",
+      "sid-c2": "userc"
+    },
+    "control_version": 1,
+    "control_protocols": [
+      1,
+      2,
+      3,
+      258,
+      259
+    ],
+    "shell_trailing_frames": [
+      {
+        "session_id": "sid-b",
+        "bytes": 18,
+        "status": 1,
+        "text": "\u001b[?2004hbash-5.2$ ",
+        "at_seconds": 0.005024116
+      }
+    ],
+    "shell_frames": [
+      {
+        "session_id": "sid-a",
+        "bytes": 18,
+        "status": 1,
+        "text": "\u001b[?2004hbash-5.2$ ",
+        "at_seconds": 0.002819772
+      },
+      {
+        "session_id": "sid-a",
+        "bytes": 57,
+        "status": 1,
+        "text": "printf '%s%s\\n' 'MRKALPHA_' 'DONE'; stty -echo\r\n\u001b[?2004l\r",
+        "at_seconds": 0.003047698
+      },
+      {
+        "session_id": "sid-a",
+        "bytes": 15,
+        "status": 1,
+        "text": "MRKALPHA_DONE\r\n",
+        "at_seconds": 0.003201217
+      },
+      {
+        "session_id": "sid-b",
+        "bytes": 56,
+        "status": 1,
+        "text": "printf '%s%s\\n' 'MRKBRAVO_' 'DONE'; stty -echo\r\n\u001b[?2004h",
+        "at_seconds": 0.003640436
+      },
+      {
+        "session_id": "sid-b",
+        "bytes": 10,
+        "status": 1,
+        "text": "bash-5.2$ ",
+        "at_seconds": 0.003930398
+      },
+      {
+        "session_id": "sid-b",
+        "bytes": 57,
+        "status": 1,
+        "text": "printf '%s%s\\n' 'MRKBRAVO_' 'DONE'; stty -echo\r\n\u001b[?2004l\r",
+        "at_seconds": 0.003932252
+      },
+      {
+        "session_id": "sid-b",
+        "bytes": 15,
+        "status": 1,
+        "text": "MRKBRAVO_DONE\r\n",
+        "at_seconds": 0.003932706
+      },
+      {
+        "session_id": "sid-a",
+        "bytes": 18,
+        "status": 1,
+        "text": "\u001b[?2004hbash-5.2$ ",
+        "at_seconds": 0.004219023
+      },
+      {
+        "session_id": "sid-b",
+        "bytes": 18,
+        "status": 1,
+        "text": "\u001b[?2004hbash-5.2$ ",
+        "at_seconds": 0.005014777
+      },
+      {
+        "session_id": "sid-b",
+        "bytes": 11,
+        "status": 1,
+        "text": "\u001b[?2004l\r\r\n",
+        "at_seconds": 4.007858088
+      },
+      {
+        "session_id": "sid-b",
+        "bytes": 17,
+        "status": 1,
+        "text": "MRKCHARLIE_DONE\r\n",
+        "at_seconds": 4.007860087
+      },
+      {
+        "session_id": "sid-c2",
+        "bytes": 18,
+        "status": 1,
+        "text": "\u001b[?2004hbash-5.2$ ",
+        "at_seconds": 8.013749023
+      },
+      {
+        "session_id": "sid-c2",
+        "bytes": 47,
+        "status": 1,
+        "text": "printf '%s%s\\n' 'MRKECHO_' 'DONE'; stty -echo\r\n",
+        "at_seconds": 8.067019098
+      },
+      {
+        "session_id": "sid-c2",
+        "bytes": 23,
+        "status": 1,
+        "text": "\u001b[?2004l\rMRKECHO_DONE\r\n",
+        "at_seconds": 8.067297253
+      },
+      {
+        "session_id": "sid-c2",
+        "bytes": 18,
+        "status": 1,
+        "text": "\u001b[?2004hbash-5.2$ ",
+        "at_seconds": 8.068280988
+      },
+      {
+        "session_id": "sid-c2",
+        "bytes": 11,
+        "status": 1,
+        "text": "\u001b[?2004l\r\r\n",
+        "at_seconds": 68.071318109
+      },
+      {
+        "session_id": "sid-c2",
+        "bytes": 15,
+        "status": 1,
+        "text": "MRKDELTA_DONE\r\n",
+        "at_seconds": 68.071319821
+      }
+    ],
+    "errors": []
+  },
+  "exit_codes": {
+    "daemon_exit": 0,
+    "auth_exit": -15,
+    "peer_exit_final": 0
+  },
+  "elapsed_seconds": 79.53,
+  "private_state": "/home/jason/.local/share/duo-aider/mender-rust-trial/rc-native-go-20261117224052-8a745c",
+  "run_dir": "/home/jason/.local/share/duo-aider/mender-rust-trial/rc-native-go-20261117224052-8a745c"
+}

@@ -1,0 +1,112 @@
+[
+  {
+    "name": "minimal",
+    "wire_hex": "81a368647281a570726f746fcd0001",
+    "message": {
+      "Header": {
+        "Proto": 1,
+        "MsgType": "",
+        "SessionID": "",
+        "Properties": null
+      },
+      "Body": null
+    }
+  },
+  {
+    "name": "shell_binary",
+    "wire_hex": "82a368647284a570726f746fcd0001a3747970a57368656c6ca3736964ad747269616c2d73657373696f6ea570726f707381a673746174757301a4626f6479c40500017f80ff",
+    "message": {
+      "Header": {
+        "Proto": 1,
+        "MsgType": "shell",
+        "SessionID": "trial-session",
+        "Properties": {
+          "status": 1
+        }
+      },
+      "Body": "AAF/gP8="
+    }
+  },
+  {
+    "name": "transfer_offset",
+    "wire_hex": "82a368647284a570726f746fcd0002a3747970aa66696c655f6368756e6ba3736964b07472616e736665722d73657373696f6ea570726f707381a66f6666736574d30000000000001000a4626f6479c40e7265666572656e63652064617461",
+    "message": {
+      "Header": {
+        "Proto": 2,
+        "MsgType": "file_chunk",
+        "SessionID": "transfer-session",
+        "Properties": {
+          "offset": 4096
+        }
+      },
+      "Body": "cmVmZXJlbmNlIGRhdGE="
+    }
+  },
+  {
+    "name": "open",
+    "wire_hex": "82a368647283a570726f746fcdffffa3747970a46f70656ea3736964ad747269616c2d73657373696f6ea4626f6479c40c81a876657273696f6e739101",
+    "message": {
+      "Header": {
+        "Proto": 65535,
+        "MsgType": "open",
+        "SessionID": "trial-session",
+        "Properties": null
+      },
+      "Body": "gah2ZXJzaW9uc5EB"
+    }
+  },
+  {
+    "name": "accept",
+    "wire_hex": "82a368647283a570726f746fcdffffa3747970a6616363657074a3736964ad747269616c2d73657373696f6ea4626f6479c42782a776657273696f6e01a970726f746f636f6c7396cd0001cd0002cd0003cd0004cd0102cd0103",
+    "message": {
+      "Header": {
+        "Proto": 65535,
+        "MsgType": "accept",
+        "SessionID": "trial-session",
+        "Properties": null
+      },
+      "Body": "gqd2ZXJzaW9uAalwcm90b2NvbHOWzQABzQACzQADzQAEzQECzQED"
+    }
+  },
+  {
+    "name": "unknown_protocol",
+    "wire_hex": "81a368647282a570726f746fcd8000a570726f707381a6637573746f6da9707265736572766564",
+    "message": {
+      "Header": {
+        "Proto": 32768,
+        "MsgType": "",
+        "SessionID": "",
+        "Properties": {
+          "custom": "preserved"
+        }
+      },
+      "Body": null
+    }
+  },
+  {
+    "name": "filetransfer_v2",
+    "wire_hex": "81a368647283a570726f746fcd0102a3747970a361636ba3736964a27632",
+    "message": {
+      "Header": {
+        "Proto": 258,
+        "MsgType": "ack",
+        "SessionID": "v2",
+        "Properties": null
+      },
+      "Body": null
+    }
+  },
+  {
+    "name": "portforward_v2",
+    "wire_hex": "81a368647283a570726f746fcd0103a3747970a473746f70a3736964a27632",
+    "message": {
+      "Header": {
+        "Proto": 259,
+        "MsgType": "stop",
+        "SessionID": "v2",
+        "Properties": null
+      },
+      "Body": null
+    }
+  }
+]

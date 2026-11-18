@@ -1,0 +1,6 @@
+/target/
+.aider*
+/pkg/bin/
+/pkg/libexec/
+/pkg/source/
+/test.log
