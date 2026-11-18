@@ -103,8 +103,8 @@
     "deny_toml_sha256": "c4ae43d561b1e0e78c15db53f238f4dd993f681a3b13d2ee2048801d8562ae4a",
     "dependency_licenses": "DEPENDENCY-LICENSES.csv",
     "license_policy": "LICENSE-POLICY.md",
-    "signed": false,
-    "signature_note": "Attestation pending for rc.2",
+    "signed": true,
+    "signature_note": "GitHub OIDC/Sigstore attestation; no local GPG key used.",
     "package_tarball": {
       "path": "../dist-rc2/mender-connect-rust-0.1.0-rc.2-x86_64-linux.tar.gz",
       "bytes": 4443904,
@@ -113,14 +113,18 @@
     "published_repository": "https://github.com/ps2chiper/mender-connect-rust-rc",
     "tag": "v0.1.0-rc.2",
     "signature_type": "GitHub Artifact Attestation (Sigstore bundle v0.3)",
-    "attestation_run": "PENDING",
+    "attestation_run": "https://github.com/ps2chiper/mender-connect-rust-rc/actions/runs/44266895500",
     "attestation_subjects": {
       "mender-connect-rust": "2d329d1fdc050f52cfb3c2b4df83b64a3557b8f94369425e740487620238845e",
       "mender-connect-session-helper": "ab2933e718f4f502203c7b6a2716684d4162058eb3904dad0c4de7ef3b1d9a1c"
     },
     "provenance_document": "PROVENANCE.md",
-    "latest_attestation_run": "PENDING",
-    "attested_subjects": {},
+    "latest_attestation_run": "https://github.com/ps2chiper/mender-connect-rust-rc/actions/runs/44266895500",
+    "attested_subjects": {
+      "package": "7042782dc5b3b5778aded859c4aacdd322b78d1c3de0e285dfa756c50c948ed2",
+      "mender-connect-rust": "2d329d1fdc050f52cfb3c2b4df83b64a3557b8f94369425e740487620238845e",
+      "mender-connect-session-helper": "ab2933e718f4f502203c7b6a2716684d4162058eb3904dad0c4de7ef3b1d9a1c"
+    },
     "attestation_document": "ATTESTATION.md",
     "code_fix": "RC-UDP-ACK-WINDOW.md",
     "mender_cli_commit": "060a594"

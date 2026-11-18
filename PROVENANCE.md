@@ -1,44 +1,48 @@
-# Release provenance — mender-connect-rust 0.1.0-rc.1
+# Release provenance — mender-connect-rust 0.1.0-rc.2
 
 ## Canonical source
 
 - Repository: `https://github.com/ps2chiper/mender-connect-rust-rc`
-- Release tag: `v0.1.0-rc.1` (resolve the exact tag commit with `git rev-parse v0.1.0-rc.1^{}`)
-- Attestation source commit: `c921d28deea86d2a92776515d801c6712a7d3cf6`
+- Release tag: `v0.1.0-rc.2`
+- Qualified target: native Ubuntu 24.04 WSL2 x86-64
 - License: Apache-2.0, upstream text SHA-256 `d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47`
 
 ## Release
 
-- Release: `https://github.com/ps2chiper/mender-connect-rust-rc/releases/tag/v0.1.0-rc.1`
+- Release: `https://github.com/ps2chiper/mender-connect-rust-rc/releases/tag/v0.1.0-rc.2`
 - Prerelease: yes
-- Package: `mender-connect-rust-0.1.0-rc.1-x86_64-linux.tar.gz`
-- Package SHA-256: published in the release `SHA256SUMS` asset (the package
-  contains the binaries and docs; its hash is not embedded in the docs to avoid
-  a self-referential checksum).
-- `mender-connect-rust`: `21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4`
-- `mender-connect-session-helper`: `64fd1f8411af61a1d3491da8a00f6c83d5ef2aaa1af2ccde08dc411922691a11`
+- Package: `mender-connect-rust-0.1.0-rc.2-x86_64-linux.tar.gz`
+- Package SHA-256: `7042782dc5b3b5778aded859c4aacdd322b78d1c3de0e285dfa756c50c948ed2`
+- `mender-connect-rust`: `2d329d1fdc050f52cfb3c2b4df83b64a3557b8f94369425e740487620238845e`
+- `mender-connect-session-helper`: `ab2933e718f4f502203c7b6a2716684d4162058eb3904dad0c4de7ef3b1d9a1c`
 
 ## Build attestation
 
-GitHub Actions run: `https://github.com/ps2chiper/mender-connect-rust-rc/actions/runs/44250024617`
+GitHub Actions run: `https://github.com/ps2chiper/mender-connect-rust-rc/actions/runs/44266895500`
 
-The `RC release attestation` workflow downloads the published release tarball, verifies its
-`SHA256SUMS`, verifies the binary hashes, and generates signed GitHub Artifact Attestations
-(Sigstore bundles) for both binaries. Verification through the GitHub API reports one
-attestation for each subject:
+The `RC release attestation` workflow downloads the published release tarball,
+verifies its `SHA256SUMS`, verifies the package contents, and generates signed
+GitHub Artifact Attestations (Sigstore bundles) for the package and both
+binaries. The GitHub API reports one attestation for each subject:
 
 ```text
-GET /repos/ps2chiper/mender-connect-rust-rc/attestations/sha256:21e54ac0…  -> 1
-GET /repos/ps2chiper/mender-connect-rust-rc/attestations/sha256:64fd1f84…  -> 1
+package  sha256:7042782d… -> 1
+daemon   sha256:2d329d1f… -> 1
+helper   sha256:ab2933e7… -> 1
 ```
 
-The bundle media type is `application/vnd.dev.sigstore.bundle.v0.3+json`.
-
-This is a GitHub OIDC/Sigstore build-and-release attestation, not a locally generated GPG
-signature. No local private signing key was available or used.
+This is a GitHub OIDC/Sigstore attestation, not a locally generated GPG
+signature. No local private signing key was used.
 
 ## SBOM and reproducibility
 
-- `SBOM.cdx.json`: CycloneDX 1.5, root plus 179 dependency components, SHA-256 `824af17100201fde1d6b9a2211eb11b5e0b5d187fcdf32d80fd378bb5c258144`.
-- `REPRODUCIBLE-BUILD.md`: clean-target and different-path rebuilds both reproduced both frozen binary hashes.
-- `LICENSE-POLICY.md`: project license confirmed byte-identical to upstream Apache-2.0; `cargo-deny check all` passed with documented duplicate warnings.
+- `SBOM.cdx.json`: CycloneDX 1.5, root plus 179 dependency components,
+  SHA-256 `d6644d20cfbc60e52dcab5a80facf1ab1c0ab6de771114404ccc237ff1fb29de`.
+- `REPRODUCIBLE-BUILD.md`: clean source-copy rebuild reproduced both frozen
+  binary hashes.
+- All `cargo test --all-targets --locked` targets passed.
+- UDP 4096 full-duplex zero-loss: 10/10 repeats, 30/30 trials, 60/60
+  per-direction measurements with zero loss; see
+  `RC-4096-ZERO-LOSS-QUALIFICATION.md`.
+- Go CLI patch: `mender-cli-udp-window.patch` (commit `060a594`), with a passing
+  bounded-window unit test.
