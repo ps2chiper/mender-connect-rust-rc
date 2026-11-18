@@ -13,7 +13,9 @@
     "canonical_repository": "https://github.com/ps2chiper/mender-connect-rust-rc",
     "tag": "v0.1.0-rc.1",
     "license": "Apache-2.0",
-    "license_sha256": "d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47"
+    "license_sha256": "d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47",
+    "tag_commit": "539af76e2babe033ce3a375e831548383d2d61a7",
+    "attestation_commit": "c921d28deea86d2a92776515d801c6712a7d3cf6"
   },
   "toolchain": {
     "rustc": "1.99.1 (58cf8f9c3 2026-10-13)",
@@ -89,14 +91,21 @@
     "deny_toml_sha256": "c4ae43d561b1e0e78c15db53f238f4dd993f681a3b13d2ee2048801d8562ae4a",
     "dependency_licenses": "DEPENDENCY-LICENSES.csv",
     "license_policy": "LICENSE-POLICY.md",
-    "signed": false,
-    "signature_note": "No local trusted signing key; GitHub release/tag provenance pending attestation or owner key.",
+    "signed": true,
+    "signature_note": "GitHub OIDC/Sigstore attestation; no local GPG key used.",
     "package_tarball": {
       "path": "../dist/mender-connect-rust-0.1.0-rc.1-x86_64-linux.tar.gz",
-      "bytes": 4439037,
-      "sha256": "d8532716ed21f396d93425316c8a3ce4064f790f3d69876f7d4589e6fef7f92c"
+      "bytes": 4438508,
+      "sha256": "c26015fb492cb5d5ab3f9cd348d9c3814bff876819811bd82bea9f383183b351"
     },
     "published_repository": "https://github.com/ps2chiper/mender-connect-rust-rc",
-    "tag": "v0.1.0-rc.1"
+    "tag": "v0.1.0-rc.1",
+    "signature_type": "GitHub Artifact Attestation (Sigstore bundle v0.3)",
+    "attestation_run": "https://github.com/ps2chiper/mender-connect-rust-rc/actions/runs/44250024617",
+    "attestation_subjects": {
+      "mender-connect-rust": "21e54ac08c5453261b5ba61ec6c1f70132ee83e717163d6e9ff0e2050cfe8ee4",
+      "mender-connect-session-helper": "64fd1f8411af61a1d3491da8a00f6c83d5ef2aaa1af2ccde08dc411922691a11"
+    },
+    "provenance_document": "PROVENANCE.md"
   }
 }
