@@ -13,6 +13,7 @@ Target: native Ubuntu 24.04 WSL2 x86-64; QEMU and physical hardware excluded.
 3. **Real-server/WAN/TLS v1 envelope** — functional 32/32, TLS 1.3, 1 MiB transfers, TCP port-forward latency/bulk, paced UDP. Go comparison shows the v1 WAN limits are shared by both implementations. v2 is excluded because the CLI side is broken. Envelope: TCP port-forward ~0.32 Mb/s at ~120–140 ms RTT; UDP clean at 10 pps. WAN reconnect/heartbeat is outside the envelope. See `RC-WAN-TLS-MATRIX.md` and `RC-WAN-GO-COMPARISON.md`.
 4. **Long-duration stability** — 35-minute installed real-server terminal soak and 30-minute local mixed TLS soak; relative thread/FD/RSS budgets passed, no cleanup leaks. The historical 13-vs-12 failure was an obsolete absolute threshold below the current 17-worker baseline. See `RC-LONG-DURATION-STABILITY.md`.
 5. **License and supply chain** — project license confirmed byte-identical to upstream Apache-2.0; permanent `deny.toml`; `cargo-deny check all` passes; 180-package license inventory; duplicates documented. See `LICENSE-POLICY.md`, `deny.toml`, `DEPENDENCY-LICENSES.csv`.
+6. **Release provenance and signing** — public repository `https://github.com/ps2chiper/mender-connect-rust-rc` with tag `v0.1.0-rc.1`, CycloneDX SBOM, clean-target/different-path reproducible builds, and signed GitHub Artifact Attestations for the release package and both binaries. See `PROVENANCE.md` and `ATTESTATION.md`.
 
 ## Open blocker
 
