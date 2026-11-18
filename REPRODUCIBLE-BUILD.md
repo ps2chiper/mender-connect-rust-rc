@@ -47,8 +47,9 @@ components, generated from the frozen `cargo metadata` graph. SHA-256:
 
 ## Signature status
 
-The GitHub repository and release provide a canonical tag and asset checksums.
-No local private signing key is available in this environment; if GitHub Actions
-attestation is enabled, the build provenance attestation is the signed
-provenance record. Local GPG/cosign signing requires a trusted key supplied by
-the release owner.
+The GitHub repository and release provide the canonical tag and asset checksums.
+The `RC release attestation` workflow verified the published package checksums
+and binary hashes and generated signed GitHub Artifact Attestations (Sigstore
+bundles) for both binaries. See `PROVENANCE.md` for the run and verification
+details. This is GitHub OIDC/Sigstore attestation, not a locally generated GPG
+signature; no local private signing key was used or available.

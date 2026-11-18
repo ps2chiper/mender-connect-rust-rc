@@ -94,8 +94,8 @@
     "signature_note": "GitHub OIDC/Sigstore attestation; no local GPG key used.",
     "package_tarball": {
       "path": "../dist/mender-connect-rust-0.1.0-rc.1-x86_64-linux.tar.gz",
-      "bytes": 4438527,
-      "sha256": "6964be5f97207a0c64857d79414ce12b33c2dac726dae93cd07409d6f6fe10f1"
+      "bytes": 4438682,
+      "sha256": "810053c19c470cfac827f4d506229ab43fae76f376e6c28e22ff5ed81b5816cb"
     },
     "published_repository": "https://github.com/ps2chiper/mender-connect-rust-rc",
     "tag": "v0.1.0-rc.1",

@@ -20,8 +20,9 @@ Target: native Ubuntu 24.04 WSL2 x86-64; QEMU and physical hardware excluded.
 
 ## Provenance
 
-- Canonical source repository and tag: see the GitHub repository for this release.
-- SBOM: `SBOM.cdx.json` (CycloneDX 1.5, 179 dependency components).
+- Canonical source repository and tag: `https://github.com/ps2chiper/mender-connect-rust-rc`, tag `v0.1.0-rc.1`.
+- Release asset checksums: release `SHA256SUMS`; package SHA-256 is recorded there and in the release metadata.
+- Signed provenance: `RC release attestation` GitHub Actions run; GitHub Artifact Attestations (Sigstore bundles) for both binaries. See `PROVENANCE.md`.
 - Reproducible build: `REPRODUCIBLE-BUILD.md`; clean-target and different-path rebuilds both reproduced the frozen binary hashes.
 - License: `LICENSE` is the upstream Apache-2.0 text, SHA-256 `d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47`.
 
