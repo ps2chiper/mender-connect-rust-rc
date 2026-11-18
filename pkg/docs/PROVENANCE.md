@@ -3,9 +3,8 @@
 ## Canonical source
 
 - Repository: `https://github.com/ps2chiper/mender-connect-rust-rc`
-- Release tag: `v0.1.0-rc.1`
-- Tag commit: `539af76e2babe033ce3a375e831548383d2d61a7`
-- Latest main/attestation commit: `c921d28deea86d2a92776515d801c6712a7d3cf6`
+- Release tag: `v0.1.0-rc.1` (resolve the exact tag commit with `git rev-parse v0.1.0-rc.1^{}`)
+- Attestation source commit: `c921d28deea86d2a92776515d801c6712a7d3cf6`
 - License: Apache-2.0, upstream text SHA-256 `d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47`
 
 ## Release

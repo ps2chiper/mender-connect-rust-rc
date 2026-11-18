@@ -14,7 +14,6 @@
     "tag": "v0.1.0-rc.1",
     "license": "Apache-2.0",
     "license_sha256": "d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47",
-    "tag_commit": "539af76e2babe033ce3a375e831548383d2d61a7",
     "attestation_commit": "c921d28deea86d2a92776515d801c6712a7d3cf6"
   },
   "toolchain": {
@@ -95,8 +94,8 @@
     "signature_note": "GitHub OIDC/Sigstore attestation; no local GPG key used.",
     "package_tarball": {
       "path": "../dist/mender-connect-rust-0.1.0-rc.1-x86_64-linux.tar.gz",
-      "bytes": 4438508,
-      "sha256": "c26015fb492cb5d5ab3f9cd348d9c3814bff876819811bd82bea9f383183b351"
+      "bytes": 4438527,
+      "sha256": "6964be5f97207a0c64857d79414ce12b33c2dac726dae93cd07409d6f6fe10f1"
     },
     "published_repository": "https://github.com/ps2chiper/mender-connect-rust-rc",
     "tag": "v0.1.0-rc.1",
