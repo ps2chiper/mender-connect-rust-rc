@@ -425,12 +425,20 @@ async fn work(
         return Exit::Quiet;
     }
 
-    let requires_ack = matches!(key.proto(), ProtoType::PORT_FORWARD);
+    let requires_ack = matches!(key.proto(), ProtoType::PORT_FORWARD)
+        || (matches!(key.proto(), ProtoType::PORT_FORWARD_V2) && key.flow_control());
+    // v2 emits ACKs only when the peer opted into flow control through the
+    // routed connection-id suffix. A stock v2 peer keeps the original unpaced
+    // path. v1 always acknowledges.
+    let send_ack = requires_ack;
     let is_tcp = matches!(network, Network::Tcp);
     let is_managed = matches!(socket, Socket::ManagedUdp(..));
     // Only managed v1 UDP gets the wider window. TCP and the legacy/unmanaged
     // paths retain the original one-credit behavior.
-    let ack_window = if is_managed && matches!(network, Network::Udp) {
+    let ack_window = if requires_ack
+        && ((is_managed && matches!(network, Network::Udp))
+            || key.proto() == ProtoType::PORT_FORWARD_V2)
+    {
         ACK_WINDOW
     } else {
         1
@@ -508,9 +516,14 @@ async fn work(
             }
             Input::Command(Some(Command::Ack)) => {
                 if !requires_ack {
+                    // v2 peers ACK our forwarded data as a courtesy; the
+                    // unpaced v2 read path has no outbound credit to release.
+                    if key.proto() == ProtoType::PORT_FORWARD_V2 {
+                        continue;
+                    }
                     return Exit::Error {
                         msgtype: "ack",
-                        reason: "ack not supported for v2".to_owned(),
+                        reason: "ack not supported for this protocol".to_owned(),
                         notify_stop: false,
                     };
                 }
@@ -545,7 +558,7 @@ async fn work(
                 // A successful managed send already refreshed the shared TTL;
                 // the local bookkeeping is still kept up to date.
                 deadline = Instant::now() + INACTIVITY_TIMEOUT;
-                if requires_ack {
+                if send_ack {
                     // Acknowledge the received forward direction. This must not
                     // touch `in_flight`, which tracks outbound data awaiting a
                     // peer ack; outbound reading therefore keeps flowing.
@@ -560,6 +573,23 @@ async fn work(
             }
             Input::Read(Ok(len)) => {
                 if len == 0 && is_tcp {
+                    // Do not emit stop until every previously queued outbound
+                    // frame has been acknowledged by the peer. Without this
+                    // drain a fast target EOF races the WebSocket relay and
+                    // truncates the tail.
+                    if requires_ack {
+                        while in_flight > 0 {
+                            match timeout(IO_TIMEOUT, commands.recv()).await {
+                                Ok(Some(Command::Ack)) => {
+                                    in_flight = in_flight.saturating_sub(1);
+                                }
+                                Ok(Some(Command::Forward(_)))
+                                | Ok(Some(Command::FailForward(_))) => {}
+                                Ok(None) => return Exit::Quiet,
+                                Err(_) => return Exit::Stop,
+                            }
+                        }
+                    }
                     return Exit::Stop;
                 }
                 if !is_tcp && len > MAX_READ {

@@ -248,7 +248,7 @@ fn ack_only_for_v1_and_unknown_type_rejected() {
         .expect("ack v1"),
         ForwardRequest::Ack { .. }
     ));
-    assert!(
+    assert!(matches!(
         parse(message(
             ProtoType::PORT_FORWARD_V2,
             "ack",
@@ -256,8 +256,9 @@ fn ack_only_for_v1_and_unknown_type_rejected() {
             Some(cid("c1")),
             vec![]
         ))
-        .is_err()
-    );
+        .expect("ack v2"),
+        ForwardRequest::Ack { .. }
+    ));
     assert!(
         parse(message(
             ProtoType::PORT_FORWARD,

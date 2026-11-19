@@ -13,6 +13,10 @@ pub struct ConnectionKey {
     proto: ProtoType,
     session: String,
     id: String,
+    /// v2 peers can request the ACK-based client-to-device flow-control
+    /// extension in the `new` header. It is deliberately opt-in so a stock v2
+    /// peer that never acknowledges frames keeps the original unpaced path.
+    flow_control: bool,
 }
 
 impl ConnectionKey {
@@ -37,10 +41,17 @@ impl ConnectionKey {
         if id.is_empty() || id.len() > MAX_FIELD_LEN {
             bail!("invalid connection_id length");
         }
+        let flow_control = id.ends_with(":flow")
+            || match header.properties.get("flow_control") {
+                Some(Value::Boolean(value)) => *value,
+                Some(Value::String(value)) => value.as_str() == Some("true"),
+                _ => false,
+            };
         Ok(Self {
             proto: header.proto,
             session: session.to_owned(),
             id: id.to_owned(),
+            flow_control,
         })
     }
 
@@ -54,6 +65,10 @@ impl ConnectionKey {
 
     pub fn id(&self) -> &str {
         &self.id
+    }
+
+    pub fn flow_control(&self) -> bool {
+        self.flow_control
     }
 
     pub fn message(&self, typ: &str, body: Vec<u8>) -> ProtoMsg {
@@ -133,6 +148,8 @@ struct NewBody {
     remote_host: String,
     remote_port: u16,
     protocol: String,
+    #[serde(default)]
+    flow_control: bool,
 }
 
 const MAX_HOST_LEN: usize = 253;
@@ -157,6 +174,8 @@ pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
             if body.remote_port == 0 {
                 bail!("remote_port must be non-zero");
             }
+            let mut key = key;
+            key.flow_control = body.flow_control || key.flow_control;
             Ok(ForwardRequest::New {
                 key,
                 network,
@@ -174,8 +193,11 @@ pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
             })
         }
         "ack" => {
-            if key.proto() != ProtoType::PORT_FORWARD {
-                bail!("ack only supported for PORT_FORWARD");
+            if !matches!(
+                key.proto(),
+                ProtoType::PORT_FORWARD | ProtoType::PORT_FORWARD_V2
+            ) {
+                bail!("ack only supported for port-forward protocols");
             }
             Ok(ForwardRequest::Ack { key })
         }
