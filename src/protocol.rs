@@ -26,6 +26,7 @@ impl ProtoType {
     pub const MENDER_CLIENT: Self = Self(4);
     pub const FILE_TRANSFER_V2: Self = Self(0x102);
     pub const PORT_FORWARD_V2: Self = Self(0x103);
+    pub const PORT_FORWARD_V3: Self = Self(0x203);
     pub const CONTROL: Self = Self(0xffff);
 
     pub fn is_unspecified(&self) -> bool {

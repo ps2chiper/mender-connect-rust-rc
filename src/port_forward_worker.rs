@@ -455,7 +455,10 @@ async fn work(
     }
 
     let requires_ack = matches!(key.proto(), ProtoType::PORT_FORWARD)
-        || (matches!(key.proto(), ProtoType::PORT_FORWARD_V2) && key.flow_control());
+        || (matches!(
+            key.proto(),
+            ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
+        ) && key.flow_control());
     // v2 emits ACKs only when the peer opted into flow control through the
     // routed connection-id suffix. A stock v2 peer keeps the original unpaced
     // path. v1 always acknowledges.
@@ -466,8 +469,10 @@ async fn work(
     // paths retain the original one-credit behavior.
     let ack_window = if requires_ack
         && ((is_managed && matches!(network, Network::Udp))
-            || key.proto() == ProtoType::PORT_FORWARD_V2)
-    {
+            || matches!(
+                key.proto(),
+                ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
+            )) {
         ACK_WINDOW
     } else {
         1
@@ -480,12 +485,21 @@ async fn work(
     // peer has not acknowledged yet. Socket reads are disabled only when the
     // bounded window is full; inbound writes still work while acks drain.
     let mut in_flight = 0usize;
-    let tcp_limit = if key.proto() == ProtoType::PORT_FORWARD_V2 && is_tcp {
+    let mut v3_pending_acks = 0usize;
+    let tcp_limit = if matches!(
+        key.proto(),
+        ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
+    ) && is_tcp
+    {
         V2_MAX_FRAME
     } else {
         MAX_READ
     };
-    let max_write = if key.proto() == ProtoType::PORT_FORWARD_V2 && is_tcp {
+    let max_write = if matches!(
+        key.proto(),
+        ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
+    ) && is_tcp
+    {
         V2_MAX_FRAME
     } else {
         MAX_WRITE
@@ -558,7 +572,10 @@ async fn work(
                 if !requires_ack {
                     // v2 peers ACK our forwarded data as a courtesy; the
                     // unpaced v2 read path has no outbound credit to release.
-                    if key.proto() == ProtoType::PORT_FORWARD_V2 {
+                    if matches!(
+                        key.proto(),
+                        ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
+                    ) {
                         continue;
                     }
                     return Exit::Error {
@@ -602,7 +619,24 @@ async fn work(
                     // Acknowledge the received forward direction. This must not
                     // touch `in_flight`, which tracks outbound data awaiting a
                     // peer ack; outbound reading therefore keeps flowing.
-                    let ack = key.message("ack", Vec::new());
+                    let v3 = matches!(key.proto(), ProtoType::PORT_FORWARD_V3);
+                    let ack_every = if v3 && is_tcp { 4 } else { 1 };
+                    v3_pending_acks += 1;
+                    if v3_pending_acks < ack_every {
+                        deadline = Instant::now() + INACTIVITY_TIMEOUT;
+                        continue;
+                    }
+                    let ack_body = if v3 {
+                        let body = u32::try_from(v3_pending_acks)
+                            .unwrap_or(u32::MAX)
+                            .to_be_bytes()
+                            .to_vec();
+                        v3_pending_acks = 0;
+                        body
+                    } else {
+                        Vec::new()
+                    };
+                    let ack = key.message("ack", ack_body);
                     if send_message(events, key, generation, ack).await.is_err() {
                         return Exit::Quiet;
                     }

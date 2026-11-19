@@ -1639,7 +1639,7 @@ impl Session {
         match message.header.proto {
             ProtoType::CONTROL => self.handle_control(message).await,
             ProtoType::SHELL => self.handle_shell(message).await,
-            ProtoType::PORT_FORWARD | ProtoType::PORT_FORWARD_V2 => {
+            ProtoType::PORT_FORWARD | ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3 => {
                 self.handle_port_forward(message).await
             }
             ProtoType::FILE_TRANSFER | ProtoType::FILE_TRANSFER_V2 => {
@@ -2712,6 +2712,9 @@ fn runtime_control_open(
         }
         if !accept.protocols.contains(&ProtoType::PORT_FORWARD_V2) {
             accept.protocols.push(ProtoType::PORT_FORWARD_V2);
+        }
+        if !accept.protocols.contains(&ProtoType::PORT_FORWARD_V3) {
+            accept.protocols.push(ProtoType::PORT_FORWARD_V3);
         }
     }
     if !file_transfer_disabled {

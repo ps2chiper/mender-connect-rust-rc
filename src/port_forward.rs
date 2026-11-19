@@ -23,7 +23,7 @@ impl ConnectionKey {
     pub fn from_header(header: &ProtoHdr) -> Result<Self> {
         if !matches!(
             header.proto,
-            ProtoType::PORT_FORWARD | ProtoType::PORT_FORWARD_V2
+            ProtoType::PORT_FORWARD | ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
         ) {
             bail!("unsupported protocol for port forward: {}", header.proto);
         }
@@ -185,7 +185,10 @@ pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
             })
         }
         "forward" => {
-            let max_body = if key.proto() == ProtoType::PORT_FORWARD_V2 {
+            let max_body = if matches!(
+                key.proto(),
+                ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
+            ) {
                 V2_MAX_FORWARD_BODY
             } else {
                 MAX_FORWARD_BODY
@@ -201,7 +204,7 @@ pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
         "ack" => {
             if !matches!(
                 key.proto(),
-                ProtoType::PORT_FORWARD | ProtoType::PORT_FORWARD_V2
+                ProtoType::PORT_FORWARD | ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
             ) {
                 bail!("ack only supported for port-forward protocols");
             }
