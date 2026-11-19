@@ -154,7 +154,7 @@ struct NewBody {
 
 const MAX_HOST_LEN: usize = 253;
 const MAX_FORWARD_BODY: usize = 4096;
-const V2_MAX_FORWARD_BODY: usize = 16 * 1024;
+const V2_MAX_FORWARD_BODY: usize = 7680;
 
 pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
     let key = ConnectionKey::from_header(&message.header)?;

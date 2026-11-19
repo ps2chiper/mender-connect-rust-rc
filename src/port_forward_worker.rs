@@ -34,7 +34,7 @@ const MAX_READ: usize = 4096;
 const MAX_WRITE: usize = 4096;
 /// v2 TCP uses the larger frame size borrowed from a raw-stream tunnel; v1
 /// and UDP retain the upstream 4 KiB wire limit.
-const V2_MAX_FRAME: usize = 16 * 1024;
+const V2_MAX_FRAME: usize = 7680;
 /// Maximum number of v1 UDP outbound frames that may await a peer ack.
 /// The upstream v1 protocol uses one credit per frame; allowing a bounded
 /// window keeps the UDP receive path ahead of the socket buffer instead of

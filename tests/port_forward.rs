@@ -214,7 +214,7 @@ fn new_rejects_invalid_values() {
 
 #[test]
 fn v2_uses_larger_forward_frames_but_v1_stays_at_4k() {
-    let v2_payload = vec![0x5a; 16 * 1024];
+    let v2_payload = vec![0x5a; 7_680];
     match parse(message(
         ProtoType::PORT_FORWARD_V2,
         "forward",
@@ -222,7 +222,7 @@ fn v2_uses_larger_forward_frames_but_v1_stays_at_4k() {
         Some(cid("c1")),
         v2_payload.clone(),
     ))
-    .expect("16 KiB v2 forward body")
+    .expect("7.5 KiB v2 forward body")
     {
         ForwardRequest::Forward { body, .. } => assert_eq!(body, v2_payload),
         _ => panic!("expected Forward"),
@@ -233,10 +233,10 @@ fn v2_uses_larger_forward_frames_but_v1_stays_at_4k() {
             "forward",
             "sid",
             Some(cid("c1")),
-            vec![0; 16 * 1024 + 1],
+            vec![0; 7_681],
         ))
         .is_err(),
-        "v2 body over the new frame limit must fail"
+        "v2 body over the server-safe frame limit must fail"
     );
     assert!(
         parse(message(
