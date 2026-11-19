@@ -154,6 +154,7 @@ struct NewBody {
 
 const MAX_HOST_LEN: usize = 253;
 const MAX_FORWARD_BODY: usize = 4096;
+const V2_MAX_FORWARD_BODY: usize = 16 * 1024;
 
 pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
     let key = ConnectionKey::from_header(&message.header)?;
@@ -184,7 +185,12 @@ pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
             })
         }
         "forward" => {
-            if message.body.len() > MAX_FORWARD_BODY {
+            let max_body = if key.proto() == ProtoType::PORT_FORWARD_V2 {
+                V2_MAX_FORWARD_BODY
+            } else {
+                MAX_FORWARD_BODY
+            };
+            if message.body.len() > max_body {
                 bail!("forward body too large");
             }
             Ok(ForwardRequest::Forward {

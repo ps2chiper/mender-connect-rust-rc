@@ -31,8 +31,10 @@ const SEND_TIMEOUT: Duration = Duration::from_secs(4);
 const INACTIVITY_TIMEOUT: Duration = Duration::from_secs(600);
 const MAX_HOST_LEN: usize = 253;
 const MAX_READ: usize = 4096;
-const MAX_READ_BUFFER: usize = 4097;
 const MAX_WRITE: usize = 4096;
+/// v2 TCP uses the larger frame size borrowed from a raw-stream tunnel; v1
+/// and UDP retain the upstream 4 KiB wire limit.
+const V2_MAX_FRAME: usize = 16 * 1024;
 /// Maximum number of v1 UDP outbound frames that may await a peer ack.
 /// The upstream v1 protocol uses one credit per frame; allowing a bounded
 /// window keeps the UDP receive path ahead of the socket buffer instead of
@@ -101,10 +103,10 @@ enum Socket {
 }
 
 impl Socket {
-    async fn read_into(&mut self, buffer: &mut [u8]) -> io::Result<usize> {
+    async fn read_into(&mut self, buffer: &mut [u8], tcp_limit: usize) -> io::Result<usize> {
         match self {
             Socket::Tcp(stream) => {
-                let tcp_buffer = buffer.get_mut(..MAX_READ).ok_or_else(|| {
+                let tcp_buffer = buffer.get_mut(..tcp_limit).ok_or_else(|| {
                     io::Error::new(
                         io::ErrorKind::InvalidInput,
                         "tcp read buffer is smaller than the read limit",
@@ -112,8 +114,28 @@ impl Socket {
                 })?;
                 stream.read(tcp_buffer).await
             }
-            Socket::Udp(socket) => socket.recv(buffer).await,
-            Socket::ManagedUdp(socket, _shared) => socket.recv(buffer).await,
+            Socket::Udp(socket) => {
+                let udp_buffer = buffer
+                    .get_mut(..(MAX_READ + 1).min(buffer.len()))
+                    .ok_or_else(|| {
+                        io::Error::new(
+                            io::ErrorKind::InvalidInput,
+                            "udp read buffer is smaller than the read limit",
+                        )
+                    })?;
+                socket.recv(udp_buffer).await
+            }
+            Socket::ManagedUdp(socket, _shared) => {
+                let udp_buffer = buffer
+                    .get_mut(..(MAX_READ + 1).min(buffer.len()))
+                    .ok_or_else(|| {
+                        io::Error::new(
+                            io::ErrorKind::InvalidInput,
+                            "udp read buffer is smaller than the read limit",
+                        )
+                    })?;
+                socket.recv(udp_buffer).await
+            }
         }
     }
 
@@ -151,11 +173,12 @@ async fn next_input(
     socket: &mut Socket,
     buffer: &mut [u8],
     read_enabled: bool,
+    tcp_limit: usize,
 ) -> Input {
     if read_enabled {
         tokio::select! {
             command = commands.recv() => Input::Command(command),
-            read = socket.read_into(buffer) => Input::Read(read),
+            read = socket.read_into(buffer, tcp_limit) => Input::Read(read),
         }
     } else {
         Input::Command(commands.recv().await)
@@ -170,6 +193,9 @@ async fn connect(network: Network, host: &str, port: u16) -> Result<Socket> {
                 .await
                 .map_err(|_| anyhow!("tcp connect timed out"))?
                 .map_err(|err| anyhow!("tcp connect failed: {err}"))?;
+            let sock = socket2::SockRef::from(&stream);
+            let _ = sock.set_recv_buffer_size(4 * 1024 * 1024);
+            let _ = sock.set_send_buffer_size(4 * 1024 * 1024);
             Ok(Socket::Tcp(stream))
         }
         Network::Udp => {
@@ -197,6 +223,9 @@ async fn connect_udp(host: &str, port: u16) -> Result<UdpSocket> {
     };
     let socket = UdpSocket::bind(bind_address).await?;
     socket.connect(target).await?;
+    let sock = socket2::SockRef::from(&socket);
+    let _ = sock.set_recv_buffer_size(4 * 1024 * 1024);
+    let _ = sock.set_send_buffer_size(4 * 1024 * 1024);
     Ok(socket)
 }
 
@@ -451,7 +480,17 @@ async fn work(
     // peer has not acknowledged yet. Socket reads are disabled only when the
     // bounded window is full; inbound writes still work while acks drain.
     let mut in_flight = 0usize;
-    let mut buffer = [0u8; MAX_READ_BUFFER];
+    let tcp_limit = if key.proto() == ProtoType::PORT_FORWARD_V2 && is_tcp {
+        V2_MAX_FRAME
+    } else {
+        MAX_READ
+    };
+    let max_write = if key.proto() == ProtoType::PORT_FORWARD_V2 && is_tcp {
+        V2_MAX_FRAME
+    } else {
+        MAX_WRITE
+    };
+    let mut buffer = [0u8; V2_MAX_FRAME + 1];
     let mut deadline = Instant::now() + INACTIVITY_TIMEOUT;
 
     loop {
@@ -498,6 +537,7 @@ async fn work(
                 &mut socket,
                 &mut buffer[..],
                 !requires_ack || in_flight < ack_window,
+                tcp_limit,
             ) => input,
         };
 
@@ -531,7 +571,7 @@ async fn work(
                 in_flight = in_flight.saturating_sub(1);
             }
             Input::Command(Some(Command::Forward(data))) => {
-                if data.len() > MAX_WRITE {
+                if data.len() > max_write {
                     return Exit::Error {
                         msgtype: "forward",
                         reason: "forward payload exceeds limit".to_owned(),

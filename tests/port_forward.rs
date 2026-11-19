@@ -213,6 +213,45 @@ fn new_rejects_invalid_values() {
 }
 
 #[test]
+fn v2_uses_larger_forward_frames_but_v1_stays_at_4k() {
+    let v2_payload = vec![0x5a; 16 * 1024];
+    match parse(message(
+        ProtoType::PORT_FORWARD_V2,
+        "forward",
+        "sid",
+        Some(cid("c1")),
+        v2_payload.clone(),
+    ))
+    .expect("16 KiB v2 forward body")
+    {
+        ForwardRequest::Forward { body, .. } => assert_eq!(body, v2_payload),
+        _ => panic!("expected Forward"),
+    }
+    assert!(
+        parse(message(
+            ProtoType::PORT_FORWARD_V2,
+            "forward",
+            "sid",
+            Some(cid("c1")),
+            vec![0; 16 * 1024 + 1],
+        ))
+        .is_err(),
+        "v2 body over the new frame limit must fail"
+    );
+    assert!(
+        parse(message(
+            ProtoType::PORT_FORWARD,
+            "forward",
+            "sid",
+            Some(cid("c1")),
+            vec![0; 4097],
+        ))
+        .is_err(),
+        "v1 keeps its 4 KiB body limit"
+    );
+}
+
+#[test]
 fn forward_body_size_bounds() {
     let ok = message(
         ProtoType::PORT_FORWARD,
