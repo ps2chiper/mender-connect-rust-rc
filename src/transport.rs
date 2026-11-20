@@ -20,6 +20,8 @@ use crate::protocol::{ProtoMsg, decode, encode_message};
 
 pub const DEVICE_CONNECT_PATH: &str = "/api/devices/v1/deviceconnect/connect";
 pub const MAX_INBOUND_MESSAGE_SIZE: usize = 8192;
+// Extra envelope space for the largest negotiated TCP v3 data frame.
+const MAX_V3_MESSAGE_SIZE: usize = crate::port_forward::V3_TCP_FRAME_SIZE + 512;
 /// Maximum number of bytes allowed for inbound protocol header fields such as
 /// the session id, message type, property keys, and routing identifiers.
 pub const MAX_HEADER_FIELD_BYTES: usize = 128;
@@ -143,8 +145,8 @@ pub fn is_unauthorized_error(error: &anyhow::Error) -> bool {
 
 fn websocket_config() -> WebSocketConfig {
     let mut config = WebSocketConfig::default();
-    config.max_message_size = Some(MAX_INBOUND_MESSAGE_SIZE);
-    config.max_frame_size = Some(MAX_INBOUND_MESSAGE_SIZE);
+    config.max_message_size = Some(MAX_V3_MESSAGE_SIZE);
+    config.max_frame_size = Some(MAX_V3_MESSAGE_SIZE);
     config
 }
 
@@ -234,6 +236,15 @@ pub fn validate_inbound_message(message: &ProtoMsg) -> Result<()> {
     Ok(())
 }
 
+fn within_wire_limit(message: &ProtoMsg, encoded_size: usize) -> bool {
+    encoded_size <= MAX_INBOUND_MESSAGE_SIZE
+        || (message.header.proto == crate::protocol::ProtoType::PORT_FORWARD_V3
+            && message.header.msg_type == "forward"
+            && message.body.len() <= crate::port_forward::V3_TCP_FRAME_SIZE
+            && encoded_size <= message.body.len().saturating_add(512)
+            && encoded_size <= MAX_V3_MESSAGE_SIZE)
+}
+
 /// Encode an outbound protocol message with the inbound size bound.
 ///
 /// This intentionally applies only the size limit and not the inbound
@@ -243,7 +254,7 @@ pub fn validate_inbound_message(message: &ProtoMsg) -> Result<()> {
 /// directions share a consistent cap.
 pub fn encode_outbound_message(message: &ProtoMsg) -> Result<Vec<u8>> {
     let encoded = encode_message(message).context("failed to encode the protocol message")?;
-    if encoded.len() > MAX_INBOUND_MESSAGE_SIZE {
+    if !within_wire_limit(message, encoded.len()) {
         bail!("outbound protocol message exceeds the size limit");
     }
     Ok(encoded)
@@ -378,13 +389,13 @@ where
 
         match message {
             Message::Binary(data) => {
-                if data.len() > MAX_INBOUND_MESSAGE_SIZE {
-                    bail!(
-                        "inbound websocket message exceeds {} bytes",
-                        MAX_INBOUND_MESSAGE_SIZE
-                    );
+                if data.len() > MAX_V3_MESSAGE_SIZE {
+                    bail!("inbound websocket message exceeds the size limit");
                 }
                 let message = decode(&data).context("failed to decode the protocol message")?;
+                if !within_wire_limit(&message, data.len()) {
+                    bail!("inbound protocol message exceeds the size limit");
+                }
                 validate_inbound_message(&message)
                     .context("inbound protocol message failed validation")?;
                 return Ok(TransportEvent::Message(message));
@@ -759,6 +770,23 @@ mod tests {
             }
         }
         low
+    }
+
+    #[test]
+    fn extended_wire_budget_only_applies_to_v3_forward_payloads() {
+        use crate::port_forward::V3_TCP_FRAME_SIZE;
+        use crate::protocol::ProtoType;
+        let mut message = build(serde_json::json!({"typ":"forward","sid":"s"}));
+        message.body = vec![1; V3_TCP_FRAME_SIZE];
+        message.header.proto = ProtoType::PORT_FORWARD_V2;
+        assert!(encode_outbound_message(&message).is_err());
+        message.header.proto = ProtoType::PORT_FORWARD_V3;
+        assert!(encode_outbound_message(&message).is_ok());
+        message.body.push(1);
+        assert!(encode_outbound_message(&message).is_err());
+        message.body.pop();
+        message.header.msg_type = "ack".into();
+        assert!(encode_outbound_message(&message).is_err());
     }
 
     #[test]

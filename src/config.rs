@@ -63,6 +63,10 @@ const KNOWN_CONFIG_KEYS: &[&str] = &[
     "ExpireAfterIdle",
     "MaxPerUser",
     "PortForward",
+    "AllowedDestinations",
+    "Protocol",
+    "Address",
+    "Port",
     "FileTransfer",
     "MenderClient",
     "Limits",
@@ -164,6 +168,20 @@ pub struct FeatureConfig {
     pub disable: bool,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "PascalCase", deny_unknown_fields)]
+pub struct ForwardDestination {
+    pub protocol: crate::port_forward::Network,
+    pub address: std::net::IpAddr,
+    pub port: std::num::NonZeroU16,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct PortForwardConfig {
+    pub disable: bool,
+    pub allowed_destinations: Option<Vec<ForwardDestination>>,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Config {
     pub user: String,
@@ -171,7 +189,7 @@ pub struct Config {
     pub shell_arguments: Vec<String>,
     pub terminal: TerminalConfig,
     pub sessions: SessionsConfig,
-    pub port_forward: FeatureConfig,
+    pub port_forward: PortForwardConfig,
     pub file_transfer: FeatureConfig,
     pub mender_client: FeatureConfig,
     /// Whether the upstream `Limits` policy is enabled.
@@ -197,7 +215,7 @@ struct ConfigFile {
     shell_arguments: Option<Vec<String>>,
     terminal: Option<TerminalFile>,
     sessions: Option<SessionsFile>,
-    port_forward: Option<FeatureFile>,
+    port_forward: Option<PortForwardFile>,
     file_transfer: Option<FeatureFile>,
     mender_client: Option<FeatureFile>,
     limits: Option<LimitsFile>,
@@ -232,6 +250,21 @@ struct SessionsFile {
     expire_after: Option<u32>,
     expire_after_idle: Option<u32>,
     max_per_user: Option<u32>,
+}
+
+#[derive(Debug, Default, Deserialize)]
+#[serde(rename_all = "PascalCase", deny_unknown_fields)]
+struct PortForwardFile {
+    disable: Option<bool>,
+    #[serde(default, deserialize_with = "deserialize_destinations")]
+    allowed_destinations: Option<Vec<ForwardDestination>>,
+}
+
+// A missing key inherits the fallback policy. An explicit null is a config error.
+fn deserialize_destinations<'de, D: Deserializer<'de>>(
+    deserializer: D,
+) -> std::result::Result<Option<Vec<ForwardDestination>>, D::Error> {
+    Vec::deserialize(deserializer).map(Some)
 }
 
 #[derive(Debug, Default, Deserialize)]
@@ -288,9 +321,15 @@ impl ConfigFile {
                 .merge(sessions);
         }
         if let Some(port_forward) = other.port_forward {
-            self.port_forward
-                .get_or_insert_with(FeatureFile::default)
-                .merge(port_forward);
+            let target = self
+                .port_forward
+                .get_or_insert_with(PortForwardFile::default);
+            if port_forward.disable.is_some() {
+                target.disable = port_forward.disable;
+            }
+            if port_forward.allowed_destinations.is_some() {
+                target.allowed_destinations = port_forward.allowed_destinations;
+            }
         }
         if let Some(file_transfer) = other.file_transfer {
             self.file_transfer
@@ -415,8 +454,10 @@ impl Config {
             max_per_user: sessions.max_per_user.unwrap_or(0),
         };
 
-        let port_forward = FeatureConfig {
-            disable: port_forward.unwrap_or_default().disable.unwrap_or(false),
+        let raw_forward = port_forward.unwrap_or_default();
+        let port_forward = PortForwardConfig {
+            disable: raw_forward.disable.unwrap_or(false),
+            allowed_destinations: raw_forward.allowed_destinations,
         };
         let file_transfer = FeatureConfig {
             disable: file_transfer.unwrap_or_default().disable.unwrap_or(false),

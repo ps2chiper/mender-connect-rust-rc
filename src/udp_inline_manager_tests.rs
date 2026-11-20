@@ -524,7 +524,7 @@ async fn canceled_pending_admission_keeps_exactly_two_forward_credits() -> Resul
     let port = peer.local_addr()?.port();
     let handle = tokio::spawn(async move {
         if gate_rx.await.is_ok() {
-            port_forward_worker::run_managed_udp(
+            port_forward_worker::run_inner(
                 worker_key,
                 1,
                 Network::Udp,
@@ -532,7 +532,7 @@ async fn canceled_pending_admission_keeps_exactly_two_forward_credits() -> Resul
                 port,
                 command_rx,
                 events,
-                worker_shared,
+                port_forward_worker::WorkerMode::ManagedUdp(worker_shared),
             )
             .await;
         }
@@ -542,6 +542,7 @@ async fn canceled_pending_admission_keeps_exactly_two_forward_credits() -> Resul
     inner.entries.insert(
         key.clone(),
         Entry {
+            tcp_frame_size: None,
             generation: 1,
             phase: Phase::Connecting,
             commands,

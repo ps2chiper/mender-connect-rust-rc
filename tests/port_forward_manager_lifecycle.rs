@@ -364,3 +364,127 @@ async fn connect_failure_then_immediate_key_reuse() -> Result<()> {
     );
     Ok(())
 }
+
+#[tokio::test]
+async fn destination_policy_applies_before_connect_across_protocol_versions() -> Result<()> {
+    use mender_connect_rust::config::ForwardDestination;
+    use mender_connect_rust::port_forward::Network;
+
+    let listener = TcpListener::bind("127.0.0.1:0").await?;
+    let addr = listener.local_addr()?;
+    for proto in [
+        ProtoType::PORT_FORWARD,
+        ProtoType::PORT_FORWARD_V2,
+        ProtoType::PORT_FORWARD_V3,
+    ] {
+        let rule = ForwardDestination {
+            address: addr.ip(),
+            port: addr.port().try_into()?,
+            protocol: Network::Tcp,
+        };
+        let mut manager = PortForwardManager::with_allowed_destinations(Some(vec![rule]));
+        for (host, protocol, port) in [
+            ("localhost", "tcp", addr.port()),
+            ("127.0.0.2", "tcp", addr.port()),
+            ("127.0.0.1", "udp", addr.port()),
+            ("127.0.0.1", "tcp", if addr.port() == 1 { 2 } else { 1 }),
+        ] {
+            let mut msg = new_message(&proto, "sid", "id", port)?;
+            msg.body = encode(&NewBody {
+                remote_host: host,
+                remote_port: port,
+                protocol,
+            })?;
+            let reply = manager.handle(msg).await?;
+            ensure!(reply.len() == 1, "expected immediate rejection");
+            assert_correlation(&reply[0], &proto, "error", "sid", "id")?;
+        }
+        let open = new_message(&proto, "sid", "id", addr.port())?;
+        let mut deny_all = PortForwardManager::with_allowed_destinations(Some(vec![]));
+        ensure!(deny_all.handle(open.clone()).await?.len() == 1);
+        ensure!(manager.handle(open).await?.is_empty());
+        let _socket = accepted_and_ack(&mut manager, &listener, &proto, "sid", "id").await?;
+        manager.close_all().await?;
+    }
+    Ok(())
+}
+
+#[tokio::test]
+async fn v3_large_frames_require_agreement_and_preserve_writes_during_eof_drain() -> Result<()> {
+    let proto = ProtoType::PORT_FORWARD_V3;
+    let listener = TcpListener::bind("127.0.0.1:0").await?;
+    let port = listener.local_addr()?.port();
+    let mut manager = PortForwardManager::new();
+    let id = "bulk:flow";
+    let key = key_of(&proto, "sid", id)?;
+    let mut open = new_message(&proto, "sid", id, port)?;
+    ensure!(manager.handle(open.clone()).await?.is_empty());
+    let legacy = accepted_and_ack(&mut manager, &listener, &proto, "sid", id).await?;
+    let payload = vec![0x5a; 32 * 1024];
+    let rejected = manager
+        .handle(key.message("forward", payload.clone()))
+        .await?;
+    ensure!(rejected.len() == 1);
+    assert_correlation(&rejected[0], &proto, "error", "sid", id)?;
+    manager.close_all().await?;
+    drop(legacy);
+
+    open.body = encode(
+        &serde_json::json!({"protocol":"tcp","remote_host":"127.0.0.1",
+        "remote_port":port,"flow_control":true,"tcp_frame_size":32768}),
+    )?;
+    ensure!(manager.handle(open).await?.is_empty());
+    let (target, _) = timeout(STEP, listener.accept()).await??;
+    let accept = expect_message(&mut manager, &proto, "new", "sid", id).await?;
+    let options: serde_json::Value = mender_connect_rust::protocol::decode(&accept.body)?;
+    ensure!(options["tcp_frame_size"] == 32768);
+    manager.close_all().await?;
+    drop(target);
+
+    let mut open = new_message(&proto, "sid", id, port)?;
+    open.body = encode(
+        &serde_json::json!({"protocol":"tcp","remote_host":"127.0.0.1",
+        "remote_port":port,"flow_control":true,"tcp_frame_size":32768,"tcp_max_frame_size":262144}),
+    )?;
+    ensure!(manager.handle(open).await?.is_empty());
+    let (mut target, _) = timeout(STEP, listener.accept()).await??;
+    let accept = expect_message(&mut manager, &proto, "new", "sid", id).await?;
+    let options: serde_json::Value = mender_connect_rust::protocol::decode(&accept.body)?;
+    ensure!(options["tcp_frame_size"] == 262144);
+    let payload = vec![0x42; 262144];
+    target.write_all(b"tail").await?;
+    target.shutdown().await?;
+    let tail = expect_message(&mut manager, &proto, "forward", "sid", id).await?;
+    ensure!(tail.body == b"tail");
+    // Wait with the final ACK deliberately withheld. The worker must still
+    // deliver the opposite direction and shut down its write half in order.
+    ensure!(
+        timeout(Duration::from_millis(25), manager.next_message())
+            .await
+            .is_err()
+    );
+    ensure!(
+        manager
+            .handle(key.message("forward", payload.clone()))
+            .await?
+            .is_empty()
+    );
+    ensure!(
+        manager
+            .handle(key.message("half_close", vec![]))
+            .await?
+            .is_empty()
+    );
+    let mut received = Vec::new();
+    timeout(STEP, target.read_to_end(&mut received)).await??;
+    ensure!(received == payload);
+    ensure!(
+        manager
+            .handle(key.message("ack", 1u32.to_be_bytes().to_vec()))
+            .await?
+            .is_empty()
+    );
+    expect_message(&mut manager, &proto, "half_close", "sid", id).await?;
+    expect_message(&mut manager, &proto, "stop", "sid", id).await?;
+    Ok(())
+}

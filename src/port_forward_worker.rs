@@ -40,6 +40,8 @@ const V2_MAX_FRAME: usize = 7680;
 /// window keeps the UDP receive path ahead of the socket buffer instead of
 /// serializing every datagram on a full WebSocket round-trip.
 const ACK_WINDOW: usize = 32;
+// Deviceconnect subscribes with a 25-message channel. Leave room for ACKs and control frames.
+const V3_TCP_ACK_WINDOW: usize = 16;
 
 /// Driver command for the worker.
 #[derive(Debug)]
@@ -290,25 +292,6 @@ pub async fn run(
     commands: mpsc::Receiver<Command>,
     events: mpsc::Sender<Event>,
 ) {
-    run_inner(key, generation, network, host, port, commands, events, None).await;
-}
-
-/// Drive one port-forward connection with a manager-supplied shared UDP state.
-///
-/// Only the manager's v1 UDP path uses this entry point. The eight parameters
-/// are dictated by the preserved manager-facing signature, which is why the
-/// lint is locally allowed; it wraps the private helper below.
-#[allow(clippy::too_many_arguments)]
-pub(crate) async fn run_managed_udp(
-    key: ConnectionKey,
-    generation: u64,
-    network: Network,
-    host: String,
-    port: u16,
-    commands: mpsc::Receiver<Command>,
-    events: mpsc::Sender<Event>,
-    shared: SharedUdp,
-) {
     run_inner(
         key,
         generation,
@@ -317,13 +300,19 @@ pub(crate) async fn run_managed_udp(
         port,
         commands,
         events,
-        Some(shared),
+        WorkerMode::Standard,
     )
     .await;
 }
 
+pub(crate) enum WorkerMode {
+    Standard,
+    ManagedUdp(SharedUdp),
+    LargeTcp(usize),
+}
+
 #[allow(clippy::too_many_arguments)]
-async fn run_inner(
+pub(crate) async fn run_inner(
     key: ConnectionKey,
     generation: u64,
     network: Network,
@@ -331,7 +320,7 @@ async fn run_inner(
     port: u16,
     mut commands: mpsc::Receiver<Command>,
     events: mpsc::Sender<Event>,
-    managed: Option<SharedUdp>,
+    mode: WorkerMode,
 ) {
     let exit = work(
         &key,
@@ -341,7 +330,7 @@ async fn run_inner(
         port,
         &mut commands,
         &events,
-        managed,
+        mode,
     )
     .await;
 
@@ -386,8 +375,17 @@ async fn work(
     port: u16,
     commands: &mut mpsc::Receiver<Command>,
     events: &mpsc::Sender<Event>,
-    managed: Option<SharedUdp>,
+    mode: WorkerMode,
 ) -> Exit {
+    use crate::port_forward::TcpFrameAccept;
+    let tcp_frame_size = match mode {
+        WorkerMode::LargeTcp(size) => Some(size),
+        _ => None,
+    };
+    let managed = match mode {
+        WorkerMode::ManagedUdp(shared) => Some(shared),
+        _ => None,
+    };
     // Create the closing guard first so that *every* later termination or
     // abort path drops (and therefore closes) the shared state before the
     // terminal events are emitted by `run_inner`.
@@ -459,7 +457,23 @@ async fn work(
 
     // Announce the established connection before any socket data. The
     // successful response uses the "new" type for both v1 and v2.
-    let connected = key.message("new", Vec::new());
+    let accept = if let Some(size) = tcp_frame_size {
+        match crate::protocol::encode(&TcpFrameAccept {
+            tcp_frame_size: size,
+        }) {
+            Ok(body) => body,
+            Err(err) => {
+                return Exit::Error {
+                    msgtype: "new",
+                    reason: err.to_string(),
+                    notify_stop: false,
+                };
+            }
+        }
+    } else {
+        Vec::new()
+    };
+    let connected = key.message("new", accept);
     if send_message(events, key, generation, connected)
         .await
         .is_err()
@@ -478,14 +492,16 @@ async fn work(
     let send_ack = requires_ack;
     let is_tcp = matches!(network, Network::Tcp);
     let is_managed = matches!(socket, Socket::ManagedUdp(..));
-    // Only managed v1 UDP gets the wider window. TCP and the legacy/unmanaged
-    // paths retain the original one-credit behavior.
-    let ack_window = if requires_ack
+    let v3_tcp = is_tcp && key.proto() == ProtoType::PORT_FORWARD_V3;
+    let ack_window = if requires_ack && v3_tcp {
+        V3_TCP_ACK_WINDOW
+    } else if requires_ack
         && ((is_managed && matches!(network, Network::Udp))
             || matches!(
                 key.proto(),
                 ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
-            )) {
+            ))
+    {
         ACK_WINDOW
     } else {
         1
@@ -499,10 +515,12 @@ async fn work(
     // bounded window is full; inbound writes still work while acks drain.
     let mut in_flight = 0usize;
     let mut v3_pending_acks = 0usize;
-    let v3_tcp = is_tcp && matches!(key.proto(), ProtoType::PORT_FORWARD_V3);
     let mut peer_half_closed = false;
     let mut target_eof = false;
-    let tcp_limit = if matches!(
+    let mut half_close_sent = false;
+    let tcp_limit = if let Some(size) = tcp_frame_size {
+        size
+    } else if matches!(
         key.proto(),
         ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
     ) && is_tcp
@@ -511,19 +529,33 @@ async fn work(
     } else {
         MAX_READ
     };
-    let max_write = if matches!(
-        key.proto(),
-        ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
-    ) && is_tcp
-    {
-        V2_MAX_FRAME
-    } else {
-        MAX_WRITE
-    };
-    let mut buffer = [0u8; V2_MAX_FRAME + 1];
+    let max_write = if is_tcp { tcp_limit } else { MAX_WRITE };
+    let mut buffer = vec![0u8; tcp_limit.max(MAX_READ + 1)];
     let mut deadline = Instant::now() + INACTIVITY_TIMEOUT;
 
     loop {
+        // Drain target output without dropping client writes or half-closes
+        // that arrive while the final batch of ACKs is crossing the network.
+        if target_eof && in_flight == 0 {
+            if !half_close_sent {
+                if send_message(
+                    events,
+                    key,
+                    generation,
+                    key.message("half_close", Vec::new()),
+                )
+                .await
+                .is_err()
+                {
+                    return Exit::Quiet;
+                }
+                half_close_sent = true;
+                deadline = Instant::now() + INACTIVITY_TIMEOUT;
+            }
+            if peer_half_closed {
+                return Exit::Stop;
+            }
+        }
         // Compute the effective wake deadline. Managed mode uses the shared
         // deadline directly: the local deadline may already have been expired
         // and then extended inline, so taking the minimum would keep firing an
@@ -613,9 +645,6 @@ async fn work(
                     }
                 }
                 peer_half_closed = true;
-                if target_eof {
-                    return Exit::Stop;
-                }
             }
             Input::Command(Some(Command::Ack(count))) => {
                 if !requires_ack {
@@ -637,6 +666,9 @@ async fn work(
                 // v3 batches several target-to-client frames into one ACK.
                 let released = usize::try_from(count).unwrap_or(usize::MAX);
                 in_flight = in_flight.saturating_sub(released);
+                if target_eof && in_flight > 0 && released > 0 {
+                    deadline = Instant::now() + IO_TIMEOUT;
+                }
             }
             Input::Command(Some(Command::Forward(data))) => {
                 if data.len() > max_write {
@@ -698,6 +730,11 @@ async fn work(
             }
             Input::Read(Ok(len)) => {
                 if len == 0 && is_tcp {
+                    if v3_tcp {
+                        target_eof = true;
+                        deadline = Instant::now() + IO_TIMEOUT;
+                        continue;
+                    }
                     // Do not emit stop until every previously queued outbound
                     // frame has been acknowledged by the peer. Without this
                     // drain a fast target EOF races the WebSocket relay and
@@ -711,30 +748,11 @@ async fn work(
                                 }
                                 Ok(Some(Command::Forward(_)))
                                 | Ok(Some(Command::FailForward(_))) => {}
-                                Ok(Some(Command::HalfClose)) => {
-                                    peer_half_closed = true;
-                                }
+                                Ok(Some(Command::HalfClose)) => {}
                                 Ok(None) => return Exit::Quiet,
                                 Err(_) => return Exit::Stop,
                             }
                         }
-                    }
-                    if v3_tcp && !target_eof {
-                        // The target has finished writing, but the client may
-                        // still be sending. Tell the peer this direction is
-                        // closed and keep the worker alive for its half-close.
-                        target_eof = true;
-                        let half_close = key.message("half_close", Vec::new());
-                        if send_message(events, key, generation, half_close)
-                            .await
-                            .is_err()
-                        {
-                            return Exit::Quiet;
-                        }
-                        if peer_half_closed {
-                            return Exit::Stop;
-                        }
-                        continue;
                     }
                     return Exit::Stop;
                 }

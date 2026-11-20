@@ -969,3 +969,46 @@ fn fifo_config_is_rejected_without_blocking() -> anyhow::Result<()> {
     mender_connect_rust::config::load_config(&dangling, &missing)?;
     Ok(())
 }
+
+#[test]
+fn port_forward_destination_lists_inherit_replace_and_reject_invalid_rules() {
+    let dir = TempDir::new("forward-rules");
+    let fallback = write_json(
+        &dir,
+        "fallback",
+        r#"{"PortForward":{"AllowedDestinations":[{"Address":"::1","Protocol":"udp","Port":53}]}}"#,
+    );
+    let primary = write_json(&dir, "primary", r#"{"portforward":{"disable":false}}"#);
+    let inherited = config::load_config(&primary, &fallback).unwrap();
+    let rules = inherited.port_forward.allowed_destinations.unwrap();
+    assert_eq!(rules.len(), 1);
+    assert_eq!(rules[0].address, std::net::Ipv6Addr::LOCALHOST);
+    assert_eq!(
+        rules[0].protocol,
+        mender_connect_rust::port_forward::Network::Udp
+    );
+    fs::write(&primary, r#"{"PortForward":{"AllowedDestinations":[]}}"#).unwrap();
+    assert_eq!(
+        config::load_config(&primary, &fallback)
+            .unwrap()
+            .port_forward
+            .allowed_destinations,
+        Some(vec![])
+    );
+    for invalid in [
+        "null",
+        r#"[{"Address":"localhost","Protocol":"tcp","Port":22}]"#,
+        r#"[{"Address":"::1","Protocol":"tcp","Port":0}]"#,
+        r#"[{"Address":"::1","Protocol":"any","Port":53}]"#,
+    ] {
+        fs::write(
+            &primary,
+            format!(r#"{{"PortForward":{{"AllowedDestinations":{invalid}}}}}"#),
+        )
+        .unwrap();
+        assert!(
+            config::load_config(&primary, &fallback).is_err(),
+            "{invalid}"
+        );
+    }
+}

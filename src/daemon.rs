@@ -1428,6 +1428,9 @@ impl Session {
         } else {
             FileTransferManager::new()
         };
+        let port_forward = PortForwardManager::with_allowed_destinations(
+            config.port_forward.allowed_destinations.clone(),
+        );
         Ok(Self {
             config,
             transport,
@@ -1435,7 +1438,7 @@ impl Session {
             shells: BTreeMap::new(),
             registry: ShellRegistry::new(),
             router,
-            port_forward: PortForwardManager::new(),
+            port_forward,
             file_transfer,
             mender: MenderCommandManager::new(),
         })

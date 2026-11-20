@@ -79,6 +79,7 @@ enum Phase {
 /// One tracked connection: its generation, lifecycle phase, command sender and
 /// owned task.
 struct Entry {
+    tcp_frame_size: Option<usize>,
     generation: u64,
     phase: Phase,
     commands: mpsc::Sender<Command>,
@@ -116,6 +117,7 @@ struct PendingCommand {
 
 /// Owns and supervises all port-forward workers.
 pub struct PortForwardManager {
+    allowed_destinations: Option<Vec<crate::config::ForwardDestination>>,
     inner: Mutex<Inner>,
     /// Manager-side sender kept alive so the event channel never closes merely
     /// because no workers currently exist.
@@ -136,8 +138,15 @@ pub struct PortForwardManager {
 
 impl PortForwardManager {
     pub fn new() -> Self {
+        Self::with_allowed_destinations(None)
+    }
+
+    pub fn with_allowed_destinations(
+        allowed_destinations: Option<Vec<crate::config::ForwardDestination>>,
+    ) -> Self {
         let (event_tx, event_rx) = mpsc::channel(EVENT_CAPACITY);
         Self {
+            allowed_destinations,
             inner: Mutex::new(Inner {
                 entries: HashMap::new(),
                 generation: 0,
@@ -188,7 +197,21 @@ impl PortForwardManager {
                 network,
                 host,
                 port,
+                tcp_frame_size,
             } => {
+                if let Some(allowed) = &self.allowed_destinations {
+                    let ip = host.parse::<std::net::IpAddr>().ok();
+                    if !allowed.iter().any(|rule| {
+                        Some(rule.address) == ip
+                            && rule.protocol == network
+                            && rule.port.get() == port
+                    }) {
+                        return Ok(vec![error_reply(
+                            &header,
+                            "destination denied by device policy",
+                        )?]);
+                    }
+                }
                 let retiring = inner
                     .entries
                     .get(&key)
@@ -221,31 +244,25 @@ impl PortForwardManager {
                     } else {
                         None
                     };
-                    let worker_key = key.clone();
-                    let handle = match shared.clone() {
-                        Some(shared_worker) => tokio::spawn(port_forward_worker::run_managed_udp(
-                            worker_key,
-                            generation,
-                            network,
-                            host,
-                            port,
-                            command_rx,
-                            self.event_tx.clone(),
-                            shared_worker,
-                        )),
-                        None => tokio::spawn(port_forward_worker::run(
-                            worker_key,
-                            generation,
-                            network,
-                            host,
-                            port,
-                            command_rx,
-                            self.event_tx.clone(),
-                        )),
+                    let mode = match (shared.clone(), tcp_frame_size) {
+                        (Some(udp), _) => port_forward_worker::WorkerMode::ManagedUdp(udp),
+                        (None, Some(size)) => port_forward_worker::WorkerMode::LargeTcp(size),
+                        (None, None) => port_forward_worker::WorkerMode::Standard,
                     };
+                    let handle = tokio::spawn(port_forward_worker::run_inner(
+                        key.clone(),
+                        generation,
+                        network,
+                        host,
+                        port,
+                        command_rx,
+                        self.event_tx.clone(),
+                        mode,
+                    ));
                     inner.entries.insert(
                         key,
                         Entry {
+                            tcp_frame_size,
                             generation,
                             phase: Phase::Connecting,
                             commands,
@@ -261,6 +278,15 @@ impl PortForwardManager {
                 }
             }
             ForwardRequest::Forward { key, body } => {
+                if body.len() > crate::port_forward::V2_MAX_FORWARD_BODY
+                    && !inner
+                        .entries
+                        .get(&key)
+                        .and_then(|entry| entry.tcp_frame_size)
+                        .is_some_and(|size| body.len() <= size)
+                {
+                    return Ok(vec![error_reply(&header, "forward body too large")?]);
+                }
                 // Fast inline path: an established managed UDP worker with no
                 // outstanding legacy forward can accept the datagram directly.
                 let inline = match inner.entries.get(&key) {
@@ -1041,6 +1067,7 @@ impl PortForwardManager {
         inner.entries.insert(
             key,
             Entry {
+                tcp_frame_size: None,
                 generation: 1,
                 phase: Phase::Established,
                 commands,
@@ -1131,6 +1158,7 @@ mod cancellation_tests {
         inner.entries.insert(
             key.clone(),
             Entry {
+                tcp_frame_size: None,
                 generation: 1,
                 phase,
                 commands,
@@ -1183,6 +1211,7 @@ mod cancellation_tests {
         inner.entries.insert(
             key.clone(),
             Entry {
+                tcp_frame_size: None,
                 generation: 1,
                 phase: Phase::Established,
                 commands,

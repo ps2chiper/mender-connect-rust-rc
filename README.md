@@ -71,6 +71,41 @@ path needs no helper. The Authentication1 API itself does not require root, and
 an unprivileged daemon is possible if the existing system-bus policy permits
 it. See `support/DEPLOYMENT.md` for the prepared packaging layout.
 
+## TCP framing on the v3 prototype
+
+For flow-controlled TCP, the CLI offers `tcp_frame_size: 32768` and
+`tcp_max_frame_size: 262144` in the MessagePack `new` body. The agent replies
+with the agreed `tcp_frame_size`. Peers that only support the older offer can
+agree on 32 KiB. An empty reply selects 7,680-byte frames. Each updated sender
+allows up to 16 outstanding frames per connection per direction. At 256 KiB
+this holds up to 4 MiB in flight while keeping a single stream inside the
+25-message Deviceconnect subscription queue. Concurrent streams can share
+that queue. The device checks the negotiated limit before queuing payloads.
+Destination policy applies during connection setup.
+
+## Restrict port-forward destinations
+
+On the v3 prototype branch, the device can restrict new port forwards in
+`mender-connect.conf`. For example, this allows TCP connections to the device's
+local HTTPS service:
+
+```json
+{
+  "PortForward": {
+    "AllowedDestinations": [
+      { "Protocol": "tcp", "Address": "127.0.0.1", "Port": 443 }
+    ]
+  }
+}
+```
+
+Each entry matches an exact IPv4 or IPv6 address, protocol (`tcp` or `udp`),
+and port (1–65535). With a list configured, clients must request a numeric IP.
+An empty list denies every destination. Omitting the key inherits the fallback
+file's list, or allows all destinations if neither file defines one. A primary
+list replaces the entire fallback list. The device reads the policy at startup
+and checks every v1, v2, and v3 connection before opening a socket.
+
 ## D-Bus compatibility
 
 The application is a **client** of the existing system-bus service

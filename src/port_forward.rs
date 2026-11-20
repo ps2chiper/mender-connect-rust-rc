@@ -117,7 +117,8 @@ pub fn error_reply(header: &ProtoHdr, error: &str) -> Result<ProtoMsg> {
     })
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum Network {
     Tcp,
     Udp,
@@ -130,6 +131,7 @@ pub enum ForwardRequest {
         network: Network,
         host: String,
         port: u16,
+        tcp_frame_size: Option<usize>,
     },
     Forward {
         key: ConnectionKey,
@@ -154,11 +156,22 @@ struct NewBody {
     protocol: String,
     #[serde(default)]
     flow_control: bool,
+    #[serde(default)]
+    tcp_frame_size: usize,
+    #[serde(default)]
+    tcp_max_frame_size: usize,
+}
+
+pub(crate) const V3_TCP_FRAME_SIZE: usize = 256 * 1024;
+
+#[derive(Serialize)]
+pub(crate) struct TcpFrameAccept {
+    pub tcp_frame_size: usize,
 }
 
 const MAX_HOST_LEN: usize = 253;
 const MAX_FORWARD_BODY: usize = 4096;
-const V2_MAX_FORWARD_BODY: usize = 7680;
+pub(crate) const V2_MAX_FORWARD_BODY: usize = 7680;
 
 pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
     let key = ConnectionKey::from_header(&message.header)?;
@@ -181,7 +194,21 @@ pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
             }
             let mut key = key;
             key.flow_control = body.flow_control || key.flow_control;
+            let tcp_frame_size = if key.proto() == ProtoType::PORT_FORWARD_V3
+                && network == Network::Tcp
+                && key.flow_control
+                && body.tcp_frame_size == 32 * 1024
+            {
+                Some(if body.tcp_max_frame_size >= V3_TCP_FRAME_SIZE {
+                    V3_TCP_FRAME_SIZE
+                } else {
+                    32 * 1024
+                })
+            } else {
+                None
+            };
             Ok(ForwardRequest::New {
+                tcp_frame_size,
                 key,
                 network,
                 host: body.remote_host,
@@ -189,13 +216,10 @@ pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
             })
         }
         "forward" => {
-            let max_body = if matches!(
-                key.proto(),
-                ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
-            ) {
-                V2_MAX_FORWARD_BODY
-            } else {
-                MAX_FORWARD_BODY
+            let max_body = match key.proto() {
+                ProtoType::PORT_FORWARD_V3 => V3_TCP_FRAME_SIZE,
+                ProtoType::PORT_FORWARD_V2 => V2_MAX_FORWARD_BODY,
+                _ => MAX_FORWARD_BODY,
             };
             if message.body.len() > max_body {
                 bail!("forward body too large");
