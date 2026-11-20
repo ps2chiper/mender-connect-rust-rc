@@ -46,6 +46,7 @@ const ACK_WINDOW: usize = 32;
 pub enum Command {
     Forward(Vec<u8>),
     Ack(u32),
+    HalfClose,
     /// The manager already attempted an opportunistic inline send and it hard
     /// failed (or partially failed). The worker must report a typed `forward`
     /// error without performing *any* socket write or retry.
@@ -136,6 +137,18 @@ impl Socket {
                     })?;
                 socket.recv(udp_buffer).await
             }
+        }
+    }
+
+    async fn shutdown_write(&mut self) -> io::Result<()> {
+        match self {
+            Socket::Tcp(stream) => {
+                socket2::SockRef::from(&*stream).shutdown(std::net::Shutdown::Write)
+            }
+            Socket::Udp(_) | Socket::ManagedUdp(_, _) => Err(io::Error::new(
+                io::ErrorKind::Unsupported,
+                "half-close requires a TCP socket",
+            )),
         }
     }
 
@@ -486,6 +499,9 @@ async fn work(
     // bounded window is full; inbound writes still work while acks drain.
     let mut in_flight = 0usize;
     let mut v3_pending_acks = 0usize;
+    let v3_tcp = is_tcp && matches!(key.proto(), ProtoType::PORT_FORWARD_V3);
+    let mut peer_half_closed = false;
+    let mut target_eof = false;
     let tcp_limit = if matches!(
         key.proto(),
         ProtoType::PORT_FORWARD_V2 | ProtoType::PORT_FORWARD_V3
@@ -550,7 +566,7 @@ async fn work(
                 commands,
                 &mut socket,
                 &mut buffer[..],
-                !requires_ack || in_flight < ack_window,
+                !target_eof && (!requires_ack || in_flight < ack_window),
                 tcp_limit,
             ) => input,
         };
@@ -567,6 +583,39 @@ async fn work(
                     reason: reason.to_owned(),
                     notify_stop: true,
                 };
+            }
+            Input::Command(Some(Command::HalfClose)) => {
+                if !v3_tcp {
+                    return Exit::Error {
+                        msgtype: "half_close",
+                        reason: "half_close requires TCP v3".to_owned(),
+                        notify_stop: false,
+                    };
+                }
+                if peer_half_closed {
+                    continue;
+                }
+                match timeout(IO_TIMEOUT, socket.shutdown_write()).await {
+                    Ok(Ok(())) => {}
+                    Ok(Err(err)) => {
+                        return Exit::Error {
+                            msgtype: "half_close",
+                            reason: format!("target half-close failed: {err}"),
+                            notify_stop: true,
+                        };
+                    }
+                    Err(_) => {
+                        return Exit::Error {
+                            msgtype: "half_close",
+                            reason: "target half-close timed out".to_owned(),
+                            notify_stop: true,
+                        };
+                    }
+                }
+                peer_half_closed = true;
+                if target_eof {
+                    return Exit::Stop;
+                }
             }
             Input::Command(Some(Command::Ack(count))) => {
                 if !requires_ack {
@@ -662,10 +711,30 @@ async fn work(
                                 }
                                 Ok(Some(Command::Forward(_)))
                                 | Ok(Some(Command::FailForward(_))) => {}
+                                Ok(Some(Command::HalfClose)) => {
+                                    peer_half_closed = true;
+                                }
                                 Ok(None) => return Exit::Quiet,
                                 Err(_) => return Exit::Stop,
                             }
                         }
+                    }
+                    if v3_tcp && !target_eof {
+                        // The target has finished writing, but the client may
+                        // still be sending. Tell the peer this direction is
+                        // closed and keep the worker alive for its half-close.
+                        target_eof = true;
+                        let half_close = key.message("half_close", Vec::new());
+                        if send_message(events, key, generation, half_close)
+                            .await
+                            .is_err()
+                        {
+                            return Exit::Quiet;
+                        }
+                        if peer_half_closed {
+                            return Exit::Stop;
+                        }
+                        continue;
                     }
                     return Exit::Stop;
                 }

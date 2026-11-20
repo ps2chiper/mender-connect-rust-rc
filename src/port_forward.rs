@@ -139,6 +139,9 @@ pub enum ForwardRequest {
         key: ConnectionKey,
         count: u32,
     },
+    HalfClose {
+        key: ConnectionKey,
+    },
     Stop {
         key: ConnectionKey,
     },
@@ -220,6 +223,12 @@ pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
                 1
             };
             Ok(ForwardRequest::Ack { key, count })
+        }
+        "half_close" => {
+            if key.proto() != ProtoType::PORT_FORWARD_V3 {
+                bail!("half_close requires port-forward v3");
+            }
+            Ok(ForwardRequest::HalfClose { key })
         }
         "stop" => Ok(ForwardRequest::Stop { key }),
         other => bail!("unsupported message type: {other}"),

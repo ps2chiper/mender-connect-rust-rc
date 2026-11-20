@@ -339,6 +339,31 @@ fn v3_ack_body_carries_batch_count() {
 }
 
 #[test]
+fn half_close_is_v3_only() {
+    assert!(matches!(
+        parse(message(
+            ProtoType::PORT_FORWARD_V3,
+            "half_close",
+            "sid",
+            Some(cid("c1")),
+            vec![],
+        ))
+        .expect("v3 half_close"),
+        ForwardRequest::HalfClose { .. }
+    ));
+    assert!(
+        parse(message(
+            ProtoType::PORT_FORWARD_V2,
+            "half_close",
+            "sid",
+            Some(cid("c1")),
+            vec![],
+        ))
+        .is_err()
+    );
+}
+
+#[test]
 fn error_reply_preserves_header_and_encodes_body() {
     let hdr = header(ProtoType::PORT_FORWARD_V2, "new", "sid", Some(cid("c1")));
     let reply = error_reply(&hdr, "boom").expect("error reply");

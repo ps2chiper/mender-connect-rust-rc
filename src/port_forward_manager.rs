@@ -330,6 +330,16 @@ impl PortForwardManager {
                 )
                 .await?
             }
+            ForwardRequest::HalfClose { key } => {
+                dispatch(
+                    &mut inner,
+                    &mut self.pending,
+                    &header,
+                    &key,
+                    Command::HalfClose,
+                )
+                .await?
+            }
             ForwardRequest::Stop { key } => stop_connection(&mut inner, &header, &key).await?,
         };
 
