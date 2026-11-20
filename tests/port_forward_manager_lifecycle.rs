@@ -488,3 +488,41 @@ async fn v3_large_frames_require_agreement_and_preserve_writes_during_eof_drain(
     expect_message(&mut manager, &proto, "stop", "sid", id).await?;
     Ok(())
 }
+
+#[tokio::test]
+async fn udp_v3_batches_preserve_datagrams_in_both_directions() -> Result<()> {
+    let target = tokio::net::UdpSocket::bind("127.0.0.1:0").await?;
+    let proto = ProtoType::PORT_FORWARD_V3;
+    let id = "udp-batch:flow";
+    let mut manager = PortForwardManager::new();
+    let mut open = new_message(&proto, "sid", id, target.local_addr()?.port())?;
+    open.body = encode(
+        &serde_json::json!({"protocol":"udp","remote_host":"127.0.0.1","remote_port":target.local_addr()?.port(),"flow_control":true,"udp_batch_v1":true}),
+    )?;
+    ensure!(manager.handle(open).await?.is_empty());
+    let accepted = expect_message(&mut manager, &proto, "new", "sid", id).await?;
+    let options: serde_json::Value = mender_connect_rust::protocol::decode(&accepted.body)?;
+    ensure!(options["udp_batch_v1"] == true);
+    let key = key_of(&proto, "sid", id)?;
+    manager
+        .handle(key.message("forward", vec![0, 0, 0, 0, 0, 1, 42]))
+        .await?;
+    let ack = expect_message(&mut manager, &proto, "ack", "sid", id).await?;
+    ensure!(ack.body == 1u32.to_be_bytes());
+    let mut buf = [0; 10];
+    let (n, peer) = timeout(STEP, target.recv_from(&mut buf)).await??;
+    ensure!(n == 0);
+    let (n, _) = timeout(STEP, target.recv_from(&mut buf)).await??;
+    ensure!(n == 1 && buf[0] == 42);
+    target.send_to(&[], peer).await?;
+    target.send_to(&[42], peer).await?;
+    let frame = expect_message(&mut manager, &proto, "forward", "sid", id).await?;
+    let mut body = frame.body.get(2..).context("missing batch span")?.to_vec();
+    if body == [0, 0] {
+        let next = expect_message(&mut manager, &proto, "forward", "sid", id).await?;
+        body.extend_from_slice(next.body.get(2..).context("missing second span")?);
+    }
+    ensure!(body == [0, 0, 0, 1, 42]);
+    manager.close_all().await?;
+    Ok(())
+}

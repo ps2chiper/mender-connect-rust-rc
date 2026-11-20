@@ -79,7 +79,7 @@ enum Phase {
 /// One tracked connection: its generation, lifecycle phase, command sender and
 /// owned task.
 struct Entry {
-    tcp_frame_size: Option<usize>,
+    frame_limit: Option<usize>,
     generation: u64,
     phase: Phase,
     commands: mpsc::Sender<Command>,
@@ -198,6 +198,7 @@ impl PortForwardManager {
                 host,
                 port,
                 tcp_frame_size,
+                udp_batch,
             } => {
                 if let Some(allowed) = &self.allowed_destinations {
                     let ip = host.parse::<std::net::IpAddr>().ok();
@@ -247,6 +248,7 @@ impl PortForwardManager {
                     let mode = match (shared.clone(), tcp_frame_size) {
                         (Some(udp), _) => port_forward_worker::WorkerMode::ManagedUdp(udp),
                         (None, Some(size)) => port_forward_worker::WorkerMode::LargeTcp(size),
+                        (None, None) if udp_batch => port_forward_worker::WorkerMode::BatchUdp,
                         (None, None) => port_forward_worker::WorkerMode::Standard,
                     };
                     let handle = tokio::spawn(port_forward_worker::run_inner(
@@ -262,7 +264,11 @@ impl PortForwardManager {
                     inner.entries.insert(
                         key,
                         Entry {
-                            tcp_frame_size,
+                            frame_limit: if udp_batch {
+                                Some(crate::udp_batch::FRAME)
+                            } else {
+                                tcp_frame_size
+                            },
                             generation,
                             phase: Phase::Connecting,
                             commands,
@@ -282,7 +288,7 @@ impl PortForwardManager {
                     && !inner
                         .entries
                         .get(&key)
-                        .and_then(|entry| entry.tcp_frame_size)
+                        .and_then(|entry| entry.frame_limit)
                         .is_some_and(|size| body.len() <= size)
                 {
                     return Ok(vec![error_reply(&header, "forward body too large")?]);
@@ -1067,7 +1073,7 @@ impl PortForwardManager {
         inner.entries.insert(
             key,
             Entry {
-                tcp_frame_size: None,
+                frame_limit: None,
                 generation: 1,
                 phase: Phase::Established,
                 commands,
@@ -1158,7 +1164,7 @@ mod cancellation_tests {
         inner.entries.insert(
             key.clone(),
             Entry {
-                tcp_frame_size: None,
+                frame_limit: None,
                 generation: 1,
                 phase,
                 commands,
@@ -1211,7 +1217,7 @@ mod cancellation_tests {
         inner.entries.insert(
             key.clone(),
             Entry {
-                tcp_frame_size: None,
+                frame_limit: None,
                 generation: 1,
                 phase: Phase::Established,
                 commands,

@@ -100,6 +100,7 @@ enum Socket {
     /// Plain (unmanaged) UDP socket used by the legacy public [`run`] entry
     /// point.
     Udp(UdpSocket),
+    BatchUdp(crate::udp_batch::BatchUdp),
     /// Managed UDP socket shared with the parent via [`SharedUdp`]. Reads use
     /// the `Arc`; writes go through the bounded fallback send.
     ManagedUdp(Arc<UdpSocket>, SharedUdp),
@@ -108,6 +109,7 @@ enum Socket {
 impl Socket {
     async fn read_into(&mut self, buffer: &mut [u8], tcp_limit: usize) -> io::Result<usize> {
         match self {
+            Socket::BatchUdp(udp) => udp.read(buffer).await,
             Socket::Tcp(stream) => {
                 let tcp_buffer = buffer.get_mut(..tcp_limit).ok_or_else(|| {
                     io::Error::new(
@@ -147,7 +149,7 @@ impl Socket {
             Socket::Tcp(stream) => {
                 socket2::SockRef::from(&*stream).shutdown(std::net::Shutdown::Write)
             }
-            Socket::Udp(_) | Socket::ManagedUdp(_, _) => Err(io::Error::new(
+            Socket::Udp(_) | Socket::BatchUdp(_) | Socket::ManagedUdp(_, _) => Err(io::Error::new(
                 io::ErrorKind::Unsupported,
                 "half-close requires a TCP socket",
             )),
@@ -156,6 +158,7 @@ impl Socket {
 
     async fn write_chunk(&mut self, data: &[u8]) -> io::Result<()> {
         match self {
+            Socket::BatchUdp(udp) => udp.write(data).await,
             Socket::Tcp(stream) => stream.write_all(data).await,
             Socket::Udp(socket) => {
                 let sent = socket.send(data).await?;
@@ -309,6 +312,7 @@ pub(crate) enum WorkerMode {
     Standard,
     ManagedUdp(SharedUdp),
     LargeTcp(usize),
+    BatchUdp,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -382,6 +386,7 @@ async fn work(
         WorkerMode::LargeTcp(size) => Some(size),
         _ => None,
     };
+    let udp_batch = matches!(mode, WorkerMode::BatchUdp);
     let managed = match mode {
         WorkerMode::ManagedUdp(shared) => Some(shared),
         _ => None,
@@ -452,12 +457,20 @@ async fn work(
             }
             Socket::ManagedUdp(socket, shared)
         }
+        (None, Socket::Udp(socket)) if udp_batch => {
+            Socket::BatchUdp(crate::udp_batch::BatchUdp::new(socket))
+        }
         (_, socket) => socket,
     };
 
     // Announce the established connection before any socket data. The
     // successful response uses the "new" type for both v1 and v2.
-    let accept = if let Some(size) = tcp_frame_size {
+    let accept = if udp_batch {
+        match crate::protocol::encode(&serde_json::json!({"udp_batch_v1":true})) {
+            Ok(body) => body,
+            Err(_) => return Exit::Quiet,
+        }
+    } else if let Some(size) = tcp_frame_size {
         match crate::protocol::encode(&TcpFrameAccept {
             tcp_frame_size: size,
         }) {
@@ -493,7 +506,7 @@ async fn work(
     let is_tcp = matches!(network, Network::Tcp);
     let is_managed = matches!(socket, Socket::ManagedUdp(..));
     let v3_tcp = is_tcp && key.proto() == ProtoType::PORT_FORWARD_V3;
-    let ack_window = if requires_ack && v3_tcp {
+    let ack_window = if requires_ack && (v3_tcp || udp_batch) {
         V3_TCP_ACK_WINDOW
     } else if requires_ack
         && ((is_managed && matches!(network, Network::Udp))
@@ -529,8 +542,21 @@ async fn work(
     } else {
         MAX_READ
     };
-    let max_write = if is_tcp { tcp_limit } else { MAX_WRITE };
-    let mut buffer = vec![0u8; tcp_limit.max(MAX_READ + 1)];
+    let max_write = if udp_batch {
+        crate::udp_batch::FRAME
+    } else if is_tcp {
+        tcp_limit
+    } else {
+        MAX_WRITE
+    };
+    let mut buffer = vec![
+        0u8;
+        if udp_batch {
+            crate::udp_batch::FRAME
+        } else {
+            tcp_limit.max(MAX_READ + 1)
+        }
+    ];
     let mut deadline = Instant::now() + INACTIVITY_TIMEOUT;
 
     loop {
@@ -756,7 +782,7 @@ async fn work(
                     }
                     return Exit::Stop;
                 }
-                if !is_tcp && len > MAX_READ {
+                if !is_tcp && !udp_batch && len > MAX_READ {
                     return Exit::Error {
                         msgtype: "forward",
                         reason: "udp datagram exceeds 4096 byte limit".to_owned(),

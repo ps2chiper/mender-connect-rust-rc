@@ -49,4 +49,5 @@ pub mod transfer_limits;
 
 pub mod mender_command;
 
+mod udp_batch;
 mod udp_inline;

@@ -542,7 +542,7 @@ async fn canceled_pending_admission_keeps_exactly_two_forward_credits() -> Resul
     inner.entries.insert(
         key.clone(),
         Entry {
-            tcp_frame_size: None,
+            frame_limit: None,
             generation: 1,
             phase: Phase::Connecting,
             commands,

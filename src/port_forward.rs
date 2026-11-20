@@ -132,6 +132,7 @@ pub enum ForwardRequest {
         host: String,
         port: u16,
         tcp_frame_size: Option<usize>,
+        udp_batch: bool,
     },
     Forward {
         key: ConnectionKey,
@@ -160,6 +161,8 @@ struct NewBody {
     tcp_frame_size: usize,
     #[serde(default)]
     tcp_max_frame_size: usize,
+    #[serde(default)]
+    udp_batch_v1: bool,
 }
 
 pub(crate) const V3_TCP_FRAME_SIZE: usize = 256 * 1024;
@@ -207,7 +210,16 @@ pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
             } else {
                 None
             };
+            let udp_batch = body.udp_batch_v1;
+            if udp_batch
+                && !(key.proto() == ProtoType::PORT_FORWARD_V3
+                    && network == Network::Udp
+                    && key.flow_control)
+            {
+                bail!("UDP batching requires flow-controlled v3 UDP");
+            }
             Ok(ForwardRequest::New {
+                udp_batch,
                 tcp_frame_size,
                 key,
                 network,

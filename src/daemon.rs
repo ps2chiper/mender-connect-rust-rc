@@ -2731,7 +2731,17 @@ fn runtime_control_open(
     if !mender_client_disabled && !accept.protocols.contains(&ProtoType::MENDER_CLIENT) {
         accept.protocols.push(ProtoType::MENDER_CLIENT);
     }
-    match encode(&accept) {
+    #[derive(serde::Serialize)]
+    struct Capabilities {
+        version: i64,
+        protocols: Vec<ProtoType>,
+        udp_batch_v1: bool,
+    }
+    match encode(&Capabilities {
+        version: accept.version,
+        protocols: accept.protocols,
+        udp_batch_v1: !port_forward_disabled,
+    }) {
         Ok(body) => response.body = body,
         Err(_) => return response,
     }

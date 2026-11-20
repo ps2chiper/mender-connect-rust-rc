@@ -83,6 +83,25 @@ this holds up to 4 MiB in flight while keeping a single stream inside the
 that queue. The device checks the negotiated limit before queuing payloads.
 Destination policy applies during connection setup.
 
+## UDP framing on the v3 prototype
+
+An agent with port forwarding enabled advertises `udp_batch_v1: true` in
+the control accept body. A supporting CLI uses the v3 route for UDP, offers
+the same flag and flow control in the per-source `new`, and waits for the
+agent to confirm the flag. Older v3 agents use the CLI's existing UDP fallback.
+
+A `forward` body starts with a two-byte big-endian collection span in microseconds,
+then contains 1–64 UDP datagrams, each prefixed by an unsigned
+two-byte big-endian payload length. A zero length is an empty datagram.
+The maximum datagram is 65,507 bytes and the maximum batch is 256 KiB.
+Receivers validate a whole batch before writing its datagrams individually.
+They release groups of four over half the collection span to limit bursts
+while leaving room to catch up after a network delay.
+One credit covers one batch. A sender may have 16 outstanding batches per
+flow and flushes a partially filled batch after 12 ms. An ACK contains a
+four-byte big-endian count of completed batches. UDP retains best-effort
+delivery when endpoint queues or the relay saturate.
+
 ## Restrict port-forward destinations
 
 On the v3 prototype branch, the device can restrict new port forwards in
