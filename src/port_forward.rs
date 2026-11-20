@@ -1,4 +1,5 @@
 use std::collections::BTreeMap;
+use std::hash::{Hash, Hasher};
 
 use anyhow::{Result, bail};
 use rmpv::Value;
@@ -8,7 +9,7 @@ use crate::protocol::{ProtoHdr, ProtoMsg, ProtoType, decode, encode};
 
 const MAX_FIELD_LEN: usize = 128;
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone)]
 pub struct ConnectionKey {
     proto: ProtoType,
     session: String,
@@ -19,7 +20,25 @@ pub struct ConnectionKey {
     flow_control: bool,
 }
 
+// Only routing fields recur on every frame. Negotiated options belong to the
+// worker and must never participate in lookup or duplicate detection.
+impl PartialEq for ConnectionKey {
+    fn eq(&self, other: &Self) -> bool {
+        self.identity() == other.identity()
+    }
+}
+impl Eq for ConnectionKey {}
+impl Hash for ConnectionKey {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.identity().hash(state);
+    }
+}
+
 impl ConnectionKey {
+    fn identity(&self) -> (ProtoType, &str, &str) {
+        (self.proto, &self.session, &self.id)
+    }
+
     pub fn from_header(header: &ProtoHdr) -> Result<Self> {
         if !matches!(
             header.proto,

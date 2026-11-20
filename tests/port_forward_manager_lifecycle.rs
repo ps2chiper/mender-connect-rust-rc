@@ -491,9 +491,15 @@ async fn v3_large_frames_require_agreement_and_preserve_writes_during_eof_drain(
 
 #[tokio::test]
 async fn udp_v3_batches_preserve_datagrams_in_both_directions() -> Result<()> {
+    for id in ["udp-batch", "udp-batch:flow"] {
+        check_udp_batch_flow(id).await?;
+    }
+    Ok(())
+}
+
+async fn check_udp_batch_flow(id: &str) -> Result<()> {
     let target = tokio::net::UdpSocket::bind("127.0.0.1:0").await?;
     let proto = ProtoType::PORT_FORWARD_V3;
-    let id = "udp-batch:flow";
     let mut manager = PortForwardManager::new();
     let mut open = new_message(&proto, "sid", id, target.local_addr()?.port())?;
     open.body = encode(
@@ -523,6 +529,14 @@ async fn udp_v3_batches_preserve_datagrams_in_both_directions() -> Result<()> {
         body.extend_from_slice(next.body.get(2..).context("missing second span")?);
     }
     ensure!(body == [0, 0, 0, 1, 42]);
+    ensure!(
+        manager
+            .handle(key.message("ack", 1u32.to_be_bytes().to_vec()))
+            .await?
+            .is_empty()
+    );
+    let replies = manager.handle(key.message("stop", Vec::new())).await?;
+    ensure!(replies.len() == 1 && replies[0].header.msg_type == "stop");
     manager.close_all().await?;
     Ok(())
 }
