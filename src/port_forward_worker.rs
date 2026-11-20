@@ -45,7 +45,7 @@ const ACK_WINDOW: usize = 32;
 #[derive(Debug)]
 pub enum Command {
     Forward(Vec<u8>),
-    Ack,
+    Ack(u32),
     /// The manager already attempted an opportunistic inline send and it hard
     /// failed (or partially failed). The worker must report a typed `forward`
     /// error without performing *any* socket write or retry.
@@ -568,7 +568,7 @@ async fn work(
                     notify_stop: true,
                 };
             }
-            Input::Command(Some(Command::Ack)) => {
+            Input::Command(Some(Command::Ack(count))) => {
                 if !requires_ack {
                     // v2 peers ACK our forwarded data as a courtesy; the
                     // unpaced v2 read path has no outbound credit to release.
@@ -585,7 +585,9 @@ async fn work(
                     };
                 }
                 // Idempotent: spurious acks never create extra credits.
-                in_flight = in_flight.saturating_sub(1);
+                // v3 batches several target-to-client frames into one ACK.
+                let released = usize::try_from(count).unwrap_or(usize::MAX);
+                in_flight = in_flight.saturating_sub(released);
             }
             Input::Command(Some(Command::Forward(data))) => {
                 if data.len() > max_write {
@@ -654,8 +656,9 @@ async fn work(
                     if requires_ack {
                         while in_flight > 0 {
                             match timeout(IO_TIMEOUT, commands.recv()).await {
-                                Ok(Some(Command::Ack)) => {
-                                    in_flight = in_flight.saturating_sub(1);
+                                Ok(Some(Command::Ack(count))) => {
+                                    let released = usize::try_from(count).unwrap_or(usize::MAX);
+                                    in_flight = in_flight.saturating_sub(released);
                                 }
                                 Ok(Some(Command::Forward(_)))
                                 | Ok(Some(Command::FailForward(_))) => {}

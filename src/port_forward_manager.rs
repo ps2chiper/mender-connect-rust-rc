@@ -320,8 +320,15 @@ impl PortForwardManager {
                     }
                 }
             }
-            ForwardRequest::Ack { key } => {
-                dispatch(&mut inner, &mut self.pending, &header, &key, Command::Ack).await?
+            ForwardRequest::Ack { key, count } => {
+                dispatch(
+                    &mut inner,
+                    &mut self.pending,
+                    &header,
+                    &key,
+                    Command::Ack(count),
+                )
+                .await?
             }
             ForwardRequest::Stop { key } => stop_connection(&mut inner, &header, &key).await?,
         };

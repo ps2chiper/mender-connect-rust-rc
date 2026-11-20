@@ -283,7 +283,11 @@ async fn udp_v1_binary_echo_across_ack_gate() {
     assert_message(&echo, &worker, "forward", &first);
 
     // Release the ack gate, then exercise a second binary datagram roundtrip.
-    worker.commands.send(Command::Ack).await.expect("send ack");
+    worker
+        .commands
+        .send(Command::Ack(1))
+        .await
+        .expect("send ack");
 
     let second = b"\xff\x00udp-two\x00\xff".to_vec();
     worker
@@ -337,7 +341,11 @@ async fn tcp_v1_outbound_gate_blocks_second_forward_until_ack() {
     let _ = release_tx.send(());
     assert_no_event(&mut worker, Duration::from_millis(300)).await;
 
-    worker.commands.send(Command::Ack).await.expect("send ack");
+    worker
+        .commands
+        .send(Command::Ack(1))
+        .await
+        .expect("send ack");
     let second = recv_event(&mut worker).await;
     assert_message(&second, &worker, "forward", b"second");
 }

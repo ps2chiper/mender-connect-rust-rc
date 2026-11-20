@@ -137,6 +137,7 @@ pub enum ForwardRequest {
     },
     Ack {
         key: ConnectionKey,
+        count: u32,
     },
     Stop {
         key: ConnectionKey,
@@ -208,7 +209,17 @@ pub fn parse(message: ProtoMsg) -> Result<ForwardRequest> {
             ) {
                 bail!("ack only supported for port-forward protocols");
             }
-            Ok(ForwardRequest::Ack { key })
+            let count = if key.proto() == ProtoType::PORT_FORWARD_V3 {
+                message
+                    .body
+                    .get(..4)
+                    .and_then(|bytes| bytes.try_into().ok())
+                    .map(u32::from_be_bytes)
+                    .unwrap_or(1)
+            } else {
+                1
+            };
+            Ok(ForwardRequest::Ack { key, count })
         }
         "stop" => Ok(ForwardRequest::Stop { key }),
         other => bail!("unsupported message type: {other}"),

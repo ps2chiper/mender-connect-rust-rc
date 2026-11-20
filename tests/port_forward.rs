@@ -311,6 +311,34 @@ fn ack_only_for_v1_and_unknown_type_rejected() {
 }
 
 #[test]
+fn v3_ack_body_carries_batch_count() {
+    match parse(message(
+        ProtoType::PORT_FORWARD_V3,
+        "ack",
+        "sid",
+        Some(cid("c1")),
+        vec![0, 0, 0, 4],
+    ))
+    .expect("v3 ack")
+    {
+        ForwardRequest::Ack { count, .. } => assert_eq!(count, 4),
+        _ => panic!("expected Ack"),
+    }
+    match parse(message(
+        ProtoType::PORT_FORWARD_V3,
+        "ack",
+        "sid",
+        Some(cid("c1")),
+        vec![],
+    ))
+    .expect("v3 ack without body")
+    {
+        ForwardRequest::Ack { count, .. } => assert_eq!(count, 1),
+        _ => panic!("expected Ack"),
+    }
+}
+
+#[test]
 fn error_reply_preserves_header_and_encodes_body() {
     let hdr = header(ProtoType::PORT_FORWARD_V2, "new", "sid", Some(cid("c1")));
     let reply = error_reply(&hdr, "boom").expect("error reply");

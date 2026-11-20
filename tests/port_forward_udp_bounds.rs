@@ -77,7 +77,7 @@ async fn udp_bounds(proto: ProtoType) {
             "empty and exact-limit datagrams stay intact"
         );
         if proto == ProtoType::PORT_FORWARD {
-            commands.send(Command::Ack).await.expect("v1 ACK");
+            commands.send(Command::Ack(1)).await.expect("v1 ACK");
         }
     }
     target
